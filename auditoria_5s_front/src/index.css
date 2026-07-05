@@ -1,0 +1,67 @@
+:root {
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  color: #1f2937;
+  background: #f8fafc;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #f8fafc;
+}
+
+h1,
+p {
+  margin: 0;
+}
+
+.table {
+  --bs-table-bg: #ffffff;
+}
+
+.data-table-page-size {
+  width: 5rem;
+}
+
+.data-table-search {
+  width: min(18rem, 60vw);
+}
+
+.people-status-filter {
+  max-width: 10rem;
+}
+
+.users-status-filter {
+  min-width: 10rem;
+}
+
+.users-access-level-filter {
+  min-width: 12rem;
+}
+
+.data-table-sort {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  display: inline-flex;
+  font: inherit;
+  font-weight: 600;
+  gap: 0.25rem;
+  padding: 0;
+}
+
+.auth-page {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.auth-card {
+  width: min(420px, 100%);
+}
