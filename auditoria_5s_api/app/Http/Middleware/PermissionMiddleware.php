@@ -13,7 +13,7 @@ class PermissionMiddleware
     {
         $user = $request->user('api') ?? auth('api')->user();
 
-        if (!$user || !$user->can($permission)) {
+        if (!$user || !$user->hasPermission($permission)) {
             return response()->json([
                 'message' => 'You do not have permission to access this resource.',
             ], 403);

@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\AssessmentController;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\PersonController;
+use App\Http\Controllers\Api\PublicAssessmentController;
+use App\Http\Controllers\Api\PublicAssessmentEvidenceController;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\QuestionnaireController;
 use App\Http\Controllers\Api\SectorController;
@@ -18,6 +20,14 @@ Route::get('/hello', function () {
 });
 
 Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:login');
+
+Route::get('/public/assessments/{accessCode}', [PublicAssessmentController::class, 'showByAccessCode']);
+Route::post('/public/assessments/{accessCode}/answers', [PublicAssessmentController::class, 'saveAnswers']);
+Route::post('/public/assessments/{accessCode}/complete', [PublicAssessmentController::class, 'complete']);
+Route::get('/public/assessments/{accessCode}/answers/{answer}/evidences/{evidence}/file', [PublicAssessmentEvidenceController::class, 'showFile'])
+    ->name('public.assessment.evidences.show');
+Route::post('/public/assessments/{accessCode}/answers/{answer}/evidences', [PublicAssessmentEvidenceController::class, 'store']);
+Route::delete('/public/assessments/{accessCode}/answers/{answer}/evidences/{evidence}', [PublicAssessmentEvidenceController::class, 'destroy']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
@@ -63,6 +73,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('questions/categories', [QuestionController::class, 'categories'])->middleware('permission:questions.view');
     Route::get('questions', [QuestionController::class, 'index'])->middleware('permission:questions.view');
     Route::post('questions', [QuestionController::class, 'store'])->middleware('permission:questions.create');
+    Route::post('questions/reorder', [QuestionController::class, 'reorder'])->middleware('permission:questions.update');
     Route::get('questions/{question}', [QuestionController::class, 'show'])->middleware('permission:questions.view');
     Route::match(['put', 'patch'], 'questions/{question}', [QuestionController::class, 'update'])->middleware('permission:questions.update');
     Route::delete('questions/{question}', [QuestionController::class, 'destroy'])->middleware('permission:questions.delete');

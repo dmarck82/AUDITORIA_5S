@@ -18,33 +18,12 @@ class AdminUserSeeder extends Seeder
             ['active' => true]
         );
 
-        $adminPerson = Person::updateOrCreate(
-            ['email' => 'admin@admin.com.br'],
-            [
-                'name'      => 'Administrator',
-                'phone'     => null,
-                'organization_id' => $organization->id,
-                'unit_id' => null,
-                'sector_id' => null,
-                'active'    => true,
-            ]
-        );
-
-        User::updateOrCreate(
-            ['person_id' => $adminPerson->id],
-            [
-                'password' => Hash::make('resende123'),
-                'access_level' => AccessLevel::Administrator->value,
-                'active'   => true,
-            ]
-        );
-
         $examples = [
-            ['name' => 'Example Administrator', 'email' => 'administrator@example.com', 'phone' => '41970003001', 'level' => AccessLevel::Administrator->value],
-            ['name' => 'Example Manager', 'email' => 'manager@example.com', 'phone' => '41970003002', 'level' => AccessLevel::Manager->value],
-            ['name' => 'Example Operator', 'email' => 'operator@example.com', 'phone' => '41970003003', 'level' => AccessLevel::Operator->value],
-            ['name' => 'Example Respondent', 'email' => 'respondent@example.com', 'phone' => '41970003004', 'level' => AccessLevel::Respondent->value],
-            ['name' => 'Example Viewer', 'email' => 'viewer@example.com', 'phone' => '41970003005', 'level' => AccessLevel::Viewer->value],
+            ['name' => 'Administrator', 'email' => 'admin@admin.com.br', 'phone' => null, 'level' => AccessLevel::Administrator->value],
+            ['name' => 'Manager', 'email' => 'manager@admin.com.br', 'phone' => '41970004002', 'level' => AccessLevel::Manager->value],
+            ['name' => 'Operator', 'email' => 'operator@admin.com.br', 'phone' => '41970004003', 'level' => AccessLevel::Operator->value],
+            ['name' => 'Respondent', 'email' => 'respondent@admin.com.br', 'phone' => '41970004004', 'level' => AccessLevel::Respondent->value],
+            ['name' => 'Viewer', 'email' => 'viewer@admin.com.br', 'phone' => '41970004005', 'level' => AccessLevel::Viewer->value],
         ];
 
         foreach ($examples as $example) {
@@ -63,7 +42,7 @@ class AdminUserSeeder extends Seeder
             User::updateOrCreate(
                 ['person_id' => $person->id],
                 [
-                    'password' => Hash::make('password'),
+                    'password' => Hash::make('resende123'),
                     'access_level' => $example['level'],
                     'active' => true,
                 ]

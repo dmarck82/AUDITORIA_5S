@@ -16,6 +16,7 @@ class AssessmentListResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'status' => $this->status,
+            'access_code' => $this->access_code,
             'expires_at' => $this->expires_at,
             'active' => $this->active,
             'questionnaire' => new QuestionnaireListResource($this->whenLoaded('questionnaire')),

@@ -105,4 +105,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return AccessPermissions::forUser($this);
     }
+
+    public function hasPermission(string $permission): bool
+    {
+        return AccessPermissions::can($this, $permission);
+    }
 }

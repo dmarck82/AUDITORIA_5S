@@ -94,6 +94,11 @@ class AssessmentController extends Controller
             'person.sector',
             'createdBy.person',
             'updatedBy.person',
+            'answers' => fn ($query) => $query->with([
+                'assessment',
+                'question' => fn ($questionQuery) => $questionQuery->orderBy('sort_order'),
+                'evidences',
+            ]),
         ];
     }
 }

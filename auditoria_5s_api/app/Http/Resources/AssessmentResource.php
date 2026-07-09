@@ -32,6 +32,7 @@ class AssessmentResource extends JsonResource
             'person' => new PersonListResource($this->whenLoaded('person')),
             'created_by' => new UserSummaryResource($this->whenLoaded('createdBy')),
             'updated_by' => new UserSummaryResource($this->whenLoaded('updatedBy')),
+            'answers' => AssessmentAnswerResource::collection($this->whenLoaded('answers')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

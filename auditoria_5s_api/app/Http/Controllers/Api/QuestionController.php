@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Questions\ReorderQuestionsRequest;
 use App\Http\Requests\Questions\StoreQuestionRequest;
 use App\Http\Requests\Questions\UpdateQuestionRequest;
 use App\Http\Resources\QuestionCategoryResource;
@@ -10,9 +11,11 @@ use App\Http\Resources\QuestionListResource;
 use App\Http\Resources\QuestionResource;
 use App\Models\GenericTable;
 use App\Models\Question;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class QuestionController extends Controller
 {
@@ -45,6 +48,52 @@ class QuestionController extends Controller
         $question->update($request->validated());
 
         return new QuestionResource($question->load('questionnaire', 'updatedBy.person'));
+    }
+
+    public function reorder(ReorderQuestionsRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+        $questionnaireId = (int) $validated['questionnaire_id'];
+        $questionIds = array_map('intval', $validated['questions']);
+
+        $totalQuestions = Question::query()
+            ->where('questionnaire_id', $questionnaireId)
+            ->count();
+
+        if ($totalQuestions !== count($questionIds)) {
+            return response()->json([
+                'message' => 'All questionnaire questions must be sent to reorder.',
+            ], 422);
+        }
+
+        $validQuestionIds = Question::query()
+            ->where('questionnaire_id', $questionnaireId)
+            ->whereIn('id', $questionIds)
+            ->pluck('id')
+            ->map(fn ($id) => (int) $id)
+            ->all();
+
+        sort($validQuestionIds);
+        $sortedQuestionIds = $questionIds;
+        sort($sortedQuestionIds);
+
+        if ($validQuestionIds !== $sortedQuestionIds) {
+            return response()->json([
+                'message' => 'All questions must belong to the selected questionnaire.',
+            ], 422);
+        }
+
+        DB::transaction(function () use ($questionIds): void {
+            foreach ($questionIds as $index => $questionId) {
+                Question::query()
+                    ->whereKey($questionId)
+                    ->update(['sort_order' => $index + 1]);
+            }
+        });
+
+        return response()->json([
+            'message' => 'Questions reordered successfully.',
+        ]);
     }
 
     public function destroy(Question $question): Response
