@@ -5,6 +5,8 @@ import { useAuth } from '../../auth/useAuth'
 import AlertMessage from '../../components/AlertMessage'
 import DataTable from '../../components/DataTable'
 import Loading from '../../components/Loading'
+import TableActions from '../../components/TableActions'
+import { PageActions, PageHeader, StatusBadge } from '../../components/ui'
 import { fetchAllPages } from '../../utils/apiData'
 
 function QuestionnairesList() {
@@ -58,7 +60,7 @@ function QuestionnairesList() {
     {
       key: 'active',
       label: 'Ativo',
-      render: (questionnaire) => <span className={`badge text-bg-${questionnaire.active ? 'success' : 'secondary'}`}>{questionnaire.active ? 'Sim' : 'Não'}</span>,
+      render: (questionnaire) => <StatusBadge status={questionnaire.active ? 'active' : 'inactive'}>{questionnaire.active ? 'Sim' : 'Não'}</StatusBadge>,
       searchValue: (questionnaire) => (questionnaire.active ? 'Sim Ativo' : 'Não Inativo'),
       sortValue: (questionnaire) => (questionnaire.active ? 'Sim' : 'Não'),
     },
@@ -68,25 +70,27 @@ function QuestionnairesList() {
       className: 'text-end',
       sortable: false,
       render: (questionnaire) => (
-        <div className="btn-group btn-group-sm">
-          <Link className="btn btn-outline-secondary" to={`/questionnaires/${questionnaire.id}`}>Ver</Link>
-          <Link className="btn btn-outline-secondary" to={`/questions?questionnaire_id=${questionnaire.id}`}>Ver Perguntas</Link>
-          {can('questionnaires.update') && <Link className="btn btn-outline-primary" to={`/questionnaires/${questionnaire.id}/edit`}>Editar</Link>}
-          {can('questionnaires.delete') && <button className="btn btn-outline-danger" type="button" onClick={() => deleteQuestionnaire(questionnaire)}>Excluir</button>}
-        </div>
+        <TableActions actions={[
+          { label: 'Ver', to: `/questionnaires/${questionnaire.id}`, type: 'view' },
+          { label: 'Ver Perguntas', to: `/questions?questionnaire_id=${questionnaire.id}`, type: 'questions' },
+          can('questionnaires.update') && { label: 'Editar', to: `/questionnaires/${questionnaire.id}/edit`, type: 'edit' },
+          can('questionnaires.delete') && { label: 'Excluir', onClick: () => deleteQuestionnaire(questionnaire), type: 'delete' },
+        ]} />
       ),
     },
   ]
 
   return (
     <section>
-      <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-        <div>
-          <h1 className="h3 mb-1">Questionários</h1>
-          <p className="text-secondary mb-0">Gerencie modelos de perguntas para avaliações.</p>
-        </div>
-        {can('questionnaires.create') && <Link className="btn btn-primary" to="/questionnaires/create">Novo Questionário</Link>}
-      </div>
+      <PageHeader
+        title="Questionários"
+        description="Gerencie modelos de perguntas para avaliações."
+        actions={can('questionnaires.create') && (
+          <PageActions>
+            <Link className="btn btn-primary" to="/questionnaires/create">Novo Questionário</Link>
+          </PageActions>
+        )}
+      />
 
       <AlertMessage type={alert?.type} message={alert?.message} />
 

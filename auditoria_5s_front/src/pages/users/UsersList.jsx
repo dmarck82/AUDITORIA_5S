@@ -4,6 +4,8 @@ import api from '../../api/axios'
 import AlertMessage from '../../components/AlertMessage'
 import DataTable from '../../components/DataTable'
 import Loading from '../../components/Loading'
+import TableActions from '../../components/TableActions'
+import { Card, PageActions, PageHeader, StatusBadge } from '../../components/ui'
 import { useAuth } from '../../auth/useAuth'
 import { ACCESS_LEVEL_OPTIONS, getAccessLevelLabel } from '../../constants/accessLevels'
 import { fetchAllPages } from '../../utils/apiData'
@@ -73,7 +75,7 @@ function UsersList() {
     {
       key: 'active',
       label: 'Ativo',
-      render: (user) => <span className={`badge text-bg-${user.active ? 'success' : 'secondary'}`}>{user.active ? 'Sim' : 'Não'}</span>,
+      render: (user) => <StatusBadge status={user.active ? 'active' : 'inactive'}>{user.active ? 'Sim' : 'Não'}</StatusBadge>,
       searchValue: (user) => (user.active ? 'Sim Ativo' : 'Não Inativo'),
       sortValue: (user) => (user.active ? 'Sim' : 'Não'),
     },
@@ -90,17 +92,11 @@ function UsersList() {
       className: 'text-end',
       sortable: false,
       render: (user) => (
-        <div className="btn-group btn-group-sm">
-          <Link className="btn btn-outline-secondary" to={`/users/${user.id}`}>
-            Ver
-          </Link>
-          {can('users.update') && <Link className="btn btn-outline-primary" to={`/users/${user.id}/edit`}>
-            Editar
-          </Link>}
-          {can('users.delete') && <button className="btn btn-outline-danger" type="button" onClick={() => deleteUser(user)}>
-            Excluir
-          </button>}
-        </div>
+        <TableActions actions={[
+          { label: 'Ver', to: `/users/${user.id}`, type: 'view' },
+          can('users.update') && { label: 'Editar', to: `/users/${user.id}/edit`, type: 'edit' },
+          can('users.delete') && { label: 'Excluir', onClick: () => deleteUser(user), type: 'delete' },
+        ]} />
       ),
     },
   ]
@@ -118,15 +114,15 @@ function UsersList() {
 
   return (
     <section>
-      <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-        <div>
-          <h1 className="h3 mb-1">Usuários</h1>
-          <p className="text-secondary mb-0">Gerencie os acessos ao sistema.</p>
-        </div>
-        {can('users.create') && <Link className="btn btn-primary" to="/users/create">
-          Novo Usuário
-        </Link>}
-      </div>
+      <PageHeader
+        title="Usuários"
+        description="Gerencie os acessos ao sistema."
+        actions={can('users.create') && (
+          <PageActions>
+            <Link className="btn btn-primary" to="/users/create">Novo Usuário</Link>
+          </PageActions>
+        )}
+      />
 
       <AlertMessage type={alert?.type} message={alert?.message} />
 
@@ -134,7 +130,8 @@ function UsersList() {
         <Loading message="Carregando usuários..." />
       ) : (
         <>
-          <div className="d-flex flex-wrap align-items-center gap-3 mb-3">
+          <Card className="mb-3">
+          <div className="d-flex flex-wrap align-items-center gap-3">
             <label className="d-flex align-items-center gap-2 mb-0" htmlFor="users-status-filter">
               <span>Status</span>
               <select
@@ -166,6 +163,7 @@ function UsersList() {
               </select>
             </label>
           </div>
+          </Card>
 
           <DataTable columns={columns} rows={filteredUsers} emptyMessage="Nenhum usuário encontrado." />
         </>

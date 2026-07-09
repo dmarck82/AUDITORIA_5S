@@ -4,6 +4,8 @@ import api from "../../api/axios";
 import AlertMessage from "../../components/AlertMessage";
 import DataTable from "../../components/DataTable";
 import Loading from "../../components/Loading";
+import TableActions from "../../components/TableActions";
+import { Card, PageActions, PageHeader, StatusBadge } from "../../components/ui";
 import { useAuth } from "../../auth/useAuth";
 import { fetchAllPages } from "../../utils/apiData";
 
@@ -83,11 +85,9 @@ function PeopleList() {
       key: "active",
       label: "Ativo",
       render: (person) => (
-        <span
-          className={`badge text-bg-${person.active ? "success" : "secondary"}`}
-        >
+        <StatusBadge status={person.active ? "active" : "inactive"}>
           {person.active ? "Sim" : "Não"}
-        </span>
+        </StatusBadge>
       ),
       searchValue: (person) => (person.active ? "Sim Ativo" : "Não Inativo"),
       sortValue: (person) => (person.active ? "Sim" : "Não"),
@@ -98,31 +98,11 @@ function PeopleList() {
       className: "text-end",
       sortable: false,
       render: (person) => (
-        <div className="btn-group btn-group-sm">
-          <Link
-            className="btn btn-outline-secondary"
-            to={`/people/${person.id}`}
-          >
-            Ver
-          </Link>
-          {can("people.update") && (
-            <Link
-              className="btn btn-outline-primary"
-              to={`/people/${person.id}/edit`}
-            >
-              Editar
-            </Link>
-          )}
-          {can("people.delete") && (
-            <button
-              className="btn btn-outline-danger"
-              type="button"
-              onClick={() => deletePerson(person)}
-            >
-              Excluir
-            </button>
-          )}
-        </div>
+        <TableActions actions={[
+          { label: "Ver", to: `/people/${person.id}`, type: "view" },
+          can("people.update") && { label: "Editar", to: `/people/${person.id}/edit`, type: "edit" },
+          can("people.delete") && { label: "Excluir", onClick: () => deletePerson(person), type: "delete" },
+        ]} />
       ),
     },
   ];
@@ -135,25 +115,22 @@ function PeopleList() {
 
   return (
     <section>
-      <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-        <div>
-          <h1 className="h3 mb-1">Pessoas</h1>
-          <p className="text-secondary mb-0">
-            Gerencie as pessoas cadastradas.
-          </p>
-        </div>
-        {can("people.create") && (
-          <Link className="btn btn-primary" to="/people/create">
-            Nova Pessoa
-          </Link>
+      <PageHeader
+        title="Pessoas"
+        description="Gerencie as pessoas cadastradas."
+        actions={can("people.create") && (
+          <PageActions>
+            <Link className="btn btn-primary" to="/people/create">Nova Pessoa</Link>
+          </PageActions>
         )}
-      </div>
+      />
       <AlertMessage type={alert?.type} message={alert?.message} />
       {loading ? (
         <Loading message="Carregando pessoas..." />
       ) : (
         <>
-          <div className="d-flex align-items-center gap-2 mb-3">
+          <Card className="mb-3">
+          <div className="d-flex align-items-center gap-2">
             <label className="form-label mb-0" htmlFor="people-status-filter">
               Status
             </label>
@@ -168,6 +145,7 @@ function PeopleList() {
               <option value="all">Todos</option>
             </select>
           </div>
+          </Card>
           <DataTable
             columns={columns}
             rows={filteredPeople}

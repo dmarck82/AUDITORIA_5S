@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { EmptyState } from "./ui";
 
 function renderValue(column, row) {
   if (column.render) {
@@ -125,7 +126,8 @@ function DataTable({
   };
 
   return (
-    <div className="data-table">
+    <div className="data-table app-card card">
+      <div className="card-body">
       <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
         <label className="d-flex align-items-center gap-2 mb-0">
           <span>Mostrar</span>
@@ -152,7 +154,7 @@ function DataTable({
         </label>
       </div>
 
-      <div className="table-responsive">
+      <div className="table-responsive data-table-frame">
         <table className="table table-striped table-hover align-middle">
           <thead>
             <tr>
@@ -182,10 +184,10 @@ function DataTable({
             {visibleRows.length === 0 ? (
               <tr>
                 <td
-                  className="text-center text-secondary py-4"
+                  className="py-4"
                   colSpan={columns.length}
                 >
-                  {emptyMessage}
+                  <EmptyState title={emptyMessage} />
                 </td>
               </tr>
             ) : (
@@ -243,6 +245,7 @@ function DataTable({
             Último
           </button>
         </div>
+      </div>
       </div>
     </div>
   );

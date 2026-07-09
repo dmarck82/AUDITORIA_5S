@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import api from '../../api/axios'
 import AlertMessage from '../../components/AlertMessage'
 import Loading from '../../components/Loading'
+import { Card, PageActions, PageHeader, StatusBadge } from '../../components/ui'
 import { useAuth } from '../../auth/useAuth'
 import { getAccessLevelLabel } from '../../constants/accessLevels'
 import { formatDateTime } from '../../utils/formatters'
@@ -35,12 +36,11 @@ function UsersView() {
 
   return (
     <section>
-      <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-        <div>
-          <h1 className="h3 mb-1">Detalhes do Usuário</h1>
-          <p className="text-secondary mb-0">Informações de acesso.</p>
-        </div>
-        <div className="d-flex gap-2">
+      <PageHeader
+        title="Detalhes do Usuário"
+        description="Informações de acesso."
+        actions={(
+          <PageActions>
           <Link className="btn btn-outline-secondary" to="/users">
             Voltar
           </Link>
@@ -49,14 +49,14 @@ function UsersView() {
               Editar
             </Link>
           )}
-        </div>
-      </div>
+          </PageActions>
+        )}
+      />
 
       <AlertMessage type={alert?.type} message={alert?.message} />
 
       {user && (
-        <div className="card">
-          <div className="card-body">
+        <Card>
             <dl className="row mb-0">
               <dt className="col-sm-3">ID</dt>
               <dd className="col-sm-9">{user.id}</dd>
@@ -65,7 +65,7 @@ function UsersView() {
               <dt className="col-sm-3">Nível de acesso</dt>
               <dd className="col-sm-9">{getAccessLevelLabel(user.access_level)}</dd>
               <dt className="col-sm-3">Ativo</dt>
-              <dd className="col-sm-9">{user.active ? 'Sim' : 'Não'}</dd>
+              <dd className="col-sm-9"><StatusBadge status={user.active ? 'active' : 'inactive'}>{user.active ? 'Sim' : 'Não'}</StatusBadge></dd>
               <dt className="col-sm-3">Criado em</dt>
               <dd className="col-sm-9">{formatDateTime(user.created_at)}</dd>
               <dt className="col-sm-3">Atualizado em</dt>
@@ -90,8 +90,7 @@ function UsersView() {
                 </dl>
               </>
             )}
-          </div>
-        </div>
+        </Card>
       )}
     </section>
   )

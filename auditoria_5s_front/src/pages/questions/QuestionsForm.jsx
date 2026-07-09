@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import api from '../../api/axios'
 import AlertMessage from '../../components/AlertMessage'
 import Loading from '../../components/Loading'
+import { FormActions, FormSection, PageHeader } from '../../components/ui'
 import { fetchAllPages } from '../../utils/apiData'
 import { getQuestionCategoryLabel } from './questionCategories'
 
@@ -98,11 +99,9 @@ function QuestionsForm() {
 
   return (
     <section>
-      <div className="mb-4">
-        <h1 className="h3 mb-1">{isEditing ? 'Editar Pergunta' : 'Nova Pergunta'}</h1>
-        <p className="text-secondary mb-0">Vincule a pergunta a um questionário e informe sua categoria.</p>
-      </div>
+      <PageHeader title={isEditing ? 'Editar Pergunta' : 'Nova Pergunta'} description="Vincule a pergunta a um questionário e informe sua categoria." />
       <AlertMessage type={alert?.type} message={alert?.message} errors={alert?.errors} />
+      <FormSection>
       <form className="row g-3" onSubmit={submitForm}>
         <div className="col-md-6">
           <label className="form-label" htmlFor="questionnaire_id">Questionário</label>
@@ -140,11 +139,12 @@ function QuestionsForm() {
             <label className="form-check-label" htmlFor="active">Ativo</label>
           </div>
         </div>
-        <div className="col-12 d-flex gap-2">
+        <FormActions>
           <button className="btn btn-primary" type="submit" disabled={saving}>{saving ? 'Salvando...' : 'Salvar'}</button>
           <Link className="btn btn-outline-secondary" to={form.questionnaire_id ? `/questions?questionnaire_id=${form.questionnaire_id}` : '/questions'}>Cancelar</Link>
-        </div>
+        </FormActions>
       </form>
+      </FormSection>
     </section>
   )
 }

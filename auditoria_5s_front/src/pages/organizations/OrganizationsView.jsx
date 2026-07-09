@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import api from '../../api/axios'
 import AlertMessage from '../../components/AlertMessage'
 import Loading from '../../components/Loading'
+import { Card, PageActions, PageHeader, StatusBadge } from '../../components/ui'
 import { useAuth } from '../../auth/useAuth'
 import { formatDateTime } from '../../utils/formatters'
 
@@ -34,25 +35,25 @@ function OrganizationsView() {
 
   return (
     <section>
-      <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-        <div>
-          <h1 className="h3 mb-1">Detalhes da Organização</h1>
-          <p className="text-secondary mb-0">Informações da organização.</p>
-        </div>
-        <div className="d-flex gap-2">
+      <PageHeader
+        title="Detalhes da Organização"
+        description="Informações da organização."
+        actions={(
+          <PageActions>
           <Link className="btn btn-outline-secondary" to="/organizations">Voltar</Link>
           {organization && can('organizations.update') && <Link className="btn btn-primary" to={`/organizations/${organization.id}/edit`}>Editar</Link>}
-        </div>
-      </div>
+          </PageActions>
+        )}
+      />
       <AlertMessage type={alert?.type} message={alert?.message} />
       {organization && (
-        <div className="card"><div className="card-body"><dl className="row mb-0">
+        <Card><dl className="row mb-0">
           <dt className="col-sm-3">Nome</dt><dd className="col-sm-9">{organization.name || '-'}</dd>
-          <dt className="col-sm-3">Ativo</dt><dd className="col-sm-9">{organization.active ? 'Sim' : 'Não'}</dd>
+          <dt className="col-sm-3">Ativo</dt><dd className="col-sm-9"><StatusBadge status={organization.active ? 'active' : 'inactive'}>{organization.active ? 'Sim' : 'Não'}</StatusBadge></dd>
           <dt className="col-sm-3">Criado em</dt><dd className="col-sm-9">{formatDateTime(organization.created_at)}</dd>
           <dt className="col-sm-3">Atualizado em</dt><dd className="col-sm-9">{formatDateTime(organization.updated_at)}</dd>
           <dt className="col-sm-3">Atualizado por</dt><dd className="col-sm-9">{organization.updated_by_name || '-'}</dd>
-        </dl></div></div>
+        </dl></Card>
       )}
     </section>
   )

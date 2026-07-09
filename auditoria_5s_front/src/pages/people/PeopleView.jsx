@@ -4,6 +4,7 @@ import api from "../../api/axios";
 import defaultUserPhoto from "../../assets/user.jpeg";
 import AlertMessage from "../../components/AlertMessage";
 import Loading from "../../components/Loading";
+import { Card, PageActions, PageHeader, StatusBadge } from "../../components/ui";
 import { useAuth } from "../../auth/useAuth";
 import { formatDateTime, formatPhone } from "../../utils/formatters";
 
@@ -83,12 +84,11 @@ function PeopleView() {
 
   return (
     <section>
-      <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-        <div>
-          <h1 className="h3 mb-1">Detalhes da Pessoa</h1>
-          <p className="text-secondary mb-0">Informações cadastrais e identificação visual.</p>
-        </div>
-        <div className="d-flex gap-2">
+      <PageHeader
+        title="Detalhes da Pessoa"
+        description="Informações cadastrais e identificação visual."
+        actions={(
+          <PageActions>
           <Link className="btn btn-outline-secondary" to="/people">
             Voltar
           </Link>
@@ -97,16 +97,16 @@ function PeopleView() {
               Editar
             </Link>
           )}
-        </div>
-      </div>
+          </PageActions>
+        )}
+      />
 
       <AlertMessage type={alert?.type} message={alert?.message} />
 
       {person && (
         <div className="row g-4">
           <div className="col-lg-4">
-            <div className="card h-100 shadow-sm">
-              <div className="card-body text-center">
+            <Card className="h-100" bodyClassName="text-center">
                 <div className="ratio ratio-1x1 mx-auto mb-3" style={{ maxWidth: "260px" }}>
                   <img
                     alt={`Foto de ${person.name || "pessoa"}`}
@@ -116,19 +116,14 @@ function PeopleView() {
                 </div>
                 <h2 className="h5 mb-1">{person.name || "-"}</h2>
                 <p className="text-secondary mb-3">{person.job_title || "Sem cargo informado"}</p>
-                <span className={`badge text-bg-${person.active ? "success" : "secondary"}`}>
+                <StatusBadge status={person.active ? "active" : "inactive"}>
                   {person.active ? "Ativo" : "Inativo"}
-                </span>
-              </div>
-            </div>
+                </StatusBadge>
+            </Card>
           </div>
 
           <div className="col-lg-8">
-            <div className="card shadow-sm">
-              <div className="card-header bg-white">
-                <h2 className="h5 mb-0">Dados cadastrais</h2>
-              </div>
-              <div className="card-body">
+            <Card header={<h2 className="h5 mb-0">Dados cadastrais</h2>}>
                 <dl className="row gy-2 mb-0">
                   {detail("Nome", person.name)}
                   {detail("E-mail", person.email)}
@@ -141,8 +136,7 @@ function PeopleView() {
                   {detail("Atualizado em", formatDateTime(person.updated_at))}
                   {detail("Atualizado por", person.updated_by_name)}
                 </dl>
-              </div>
-            </div>
+            </Card>
           </div>
         </div>
       )}

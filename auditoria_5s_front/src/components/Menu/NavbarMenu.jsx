@@ -13,17 +13,19 @@ const menuItems = [
       { label: 'Setores', path: '/sectors', permission: 'sectors.view' },
       { label: 'Pessoas', path: '/people', permission: 'people.view' },
       { label: 'Usuários', path: '/users', permission: 'users.view' },
+    ],
+  },
+  {
+    label: 'Modelos',
+    items: [
       { label: 'Questionários', path: '/questionnaires', permission: 'questionnaires.view' },
       { label: 'Perguntas', path: '/questions', permission: 'questions.view' },
     ],
   },
   {
-    label: 'Avaliações',
+    label: 'Operação',
     items: [
       { label: 'Avaliações', path: '/assessments', permission: 'assessments.view' },
-      { label: 'Perguntas', disabled: true },
-      { label: 'Respostas', disabled: true },
-      { label: 'Evidências', disabled: true },
     ],
   },
   {
@@ -43,6 +45,7 @@ const menuItems = [
       { label: 'Labels da Organização', disabled: true },
       { label: 'Tabelas Genéricas', disabled: true },
       { label: 'Logs do Sistema', disabled: true },
+      { label: 'Sair', action: 'logout' },
     ],
   },
 ]
@@ -56,7 +59,7 @@ function DisabledMenuItem({ label }) {
   )
 }
 
-function DropdownMenu({ group, can }) {
+function DropdownMenu({ group, can, onLogout }) {
   const visibleItems = group.items.filter((item) => item.disabled || !item.permission || can(item.permission))
 
   if (visibleItems.length === 0) {
@@ -78,6 +81,10 @@ function DropdownMenu({ group, can }) {
           <li key={item.label}>
             {item.disabled ? (
               <DisabledMenuItem label={item.label} />
+            ) : item.action === 'logout' ? (
+              <button className="dropdown-item" type="button" onClick={onLogout}>
+                {item.label}
+              </button>
             ) : (
               <NavLink className="dropdown-item" to={item.path}>
                 {item.label}
@@ -90,12 +97,12 @@ function DropdownMenu({ group, can }) {
   )
 }
 
-function NavbarMenu({ can }) {
+function NavbarMenu({ can, onLogout }) {
   return (
     <ul className="navbar-nav me-auto">
       {menuItems.map((item) => {
         if (item.items) {
-          return <DropdownMenu key={item.label} group={item} can={can} />
+          return <DropdownMenu key={item.label} group={item} can={can} onLogout={onLogout} />
         }
 
         return (

@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import api from '../../api/axios'
 import AlertMessage from '../../components/AlertMessage'
 import Loading from '../../components/Loading'
+import { FormActions, FormSection, PageHeader } from '../../components/ui'
 import { fetchAllPages } from '../../utils/apiData'
-import { getAssessmentStatusLabel, toDateTimeLocalValue } from './assessmentStatus'
+import { dateTimeLocalToIso, getAssessmentStatusLabel, toDateTimeLocalValue } from './assessmentStatus'
 
 const emptyForm = {
   title: '',
@@ -20,8 +21,10 @@ const emptyForm = {
 
 function AssessmentForm() {
   const { id } = useParams()
+  const location = useLocation()
   const navigate = useNavigate()
   const isEditing = Boolean(id)
+  const returnTo = location.state?.returnTo || '/assessments'
   const [form, setForm] = useState(emptyForm)
   const [questionnaires, setQuestionnaires] = useState([])
   const [organizations, setOrganizations] = useState([])
@@ -135,7 +138,7 @@ function AssessmentForm() {
     ...form,
     unit_id: form.unit_id || null,
     sector_id: form.sector_id || null,
-    expires_at: form.expires_at || null,
+    expires_at: dateTimeLocalToIso(form.expires_at),
   })
 
   const submitForm = async (event) => {
@@ -150,7 +153,7 @@ function AssessmentForm() {
         await api.post('/assessments', buildPayload())
       }
 
-      navigate('/assessments', { state: { message: `Avaliação ${isEditing ? 'atualizada' : 'criada'} com sucesso.` } })
+      navigate(returnTo, { state: { message: `Avaliação ${isEditing ? 'atualizada' : 'criada'} com sucesso.` } })
     } catch (error) {
       setAlert({ type: 'danger', message: error.response?.data?.message || 'Não foi possível salvar a avaliação.', errors: error.response?.data?.errors })
     } finally {
@@ -166,11 +169,9 @@ function AssessmentForm() {
 
   return (
     <section>
-      <div className="mb-4">
-        <h1 className="h3 mb-1">{isEditing ? 'Editar Avaliação' : 'Nova Avaliação'}</h1>
-        <p className="text-secondary mb-0">Vincule o questionário à pessoa que irá responder.</p>
-      </div>
+      <PageHeader title={isEditing ? 'Editar Avaliação' : 'Nova Avaliação'} description="Vincule o questionário à pessoa que irá responder." />
       <AlertMessage type={alert?.type} message={alert?.message} errors={alert?.errors} />
+      <FormSection>
       <form className="row g-3" onSubmit={submitForm}>
         <div className="col-md-8">
           <label className="form-label" htmlFor="title">Título</label>
@@ -240,11 +241,12 @@ function AssessmentForm() {
             <label className="form-check-label" htmlFor="active">Ativo</label>
           </div>
         </div>
-        <div className="col-12 d-flex gap-2">
+        <FormActions>
           <button className="btn btn-primary" type="submit" disabled={saving}>{saving ? 'Salvando...' : 'Salvar'}</button>
-          <Link className="btn btn-outline-secondary" to="/assessments">Cancelar</Link>
-        </div>
+          <Link className="btn btn-outline-secondary" to={returnTo}>Cancelar</Link>
+        </FormActions>
       </form>
+      </FormSection>
     </section>
   )
 }

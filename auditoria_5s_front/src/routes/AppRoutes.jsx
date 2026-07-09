@@ -13,6 +13,7 @@ import OrganizationsView from '../pages/organizations/OrganizationsView'
 import PeopleForm from '../pages/people/PeopleForm'
 import PeopleList from '../pages/people/PeopleList'
 import PeopleView from '../pages/people/PeopleView'
+import PublicAssessmentAnswer from '../pages/public/PublicAssessmentAnswer'
 import QuestionsForm from '../pages/questions/QuestionsForm'
 import QuestionsList from '../pages/questions/QuestionsList'
 import QuestionsView from '../pages/questions/QuestionsView'
@@ -33,6 +34,7 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="login" element={<Login />} />
+      <Route path="answer/:accessCode" element={<PublicAssessmentAnswer />} />
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
           <Route index element={<HomeRedirect />} />

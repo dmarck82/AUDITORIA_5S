@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import api from "../../api/axios";
 import AlertMessage from "../../components/AlertMessage";
 import Loading from "../../components/Loading";
+import { Card, PageActions, PageHeader, StatusBadge } from "../../components/ui";
 import { useAuth } from "../../auth/useAuth";
 import { formatDateTime } from "../../utils/formatters";
 
@@ -31,14 +32,11 @@ function UnitsView() {
   if (loading) return <Loading message="Carregando unidade..." />;
   return (
     <section>
-      <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-        <div>
-          <h1 className="h3 mb-1">Detalhes da Unidade</h1>
-          <p className="text-secondary mb-0">
-            Informações da filial ou planta.
-          </p>
-        </div>
-        <div className="d-flex gap-2">
+      <PageHeader
+        title="Detalhes da Unidade"
+        description="Informações da filial ou planta."
+        actions={(
+          <PageActions>
           <Link className="btn btn-outline-secondary" to="/units">
             Voltar
           </Link>
@@ -47,12 +45,12 @@ function UnitsView() {
               Editar
             </Link>
           )}
-        </div>
-      </div>
+          </PageActions>
+        )}
+      />
       <AlertMessage type={alert?.type} message={alert?.message} />
       {unit && (
-        <div className="card">
-          <div className="card-body">
+        <Card>
             <dl className="row mb-0">
               <dt className="col-sm-3">Nome</dt>
               <dd className="col-sm-9">{unit.name || "-"}</dd>
@@ -63,7 +61,7 @@ function UnitsView() {
               <dt className="col-sm-3">Endereço</dt>
               <dd className="col-sm-9">{unit.address || "-"}</dd>
               <dt className="col-sm-3">Ativo</dt>
-              <dd className="col-sm-9">{unit.active ? "Sim" : "Não"}</dd>
+              <dd className="col-sm-9"><StatusBadge status={unit.active ? "active" : "inactive"}>{unit.active ? "Sim" : "Não"}</StatusBadge></dd>
               <dt className="col-sm-3">Criado em</dt>
               <dd className="col-sm-9">{formatDateTime(unit.created_at)}</dd>
               <dt className="col-sm-3">Atualizado em</dt>
@@ -71,8 +69,7 @@ function UnitsView() {
               <dt className="col-sm-3">Atualizado por</dt>
               <dd className="col-sm-9">{unit.updated_by_name || "-"}</dd>
             </dl>
-          </div>
-        </div>
+        </Card>
       )}
     </section>
   );

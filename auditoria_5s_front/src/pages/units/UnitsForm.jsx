@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../api/axios";
 import AlertMessage from "../../components/AlertMessage";
 import Loading from "../../components/Loading";
+import { FormActions, FormSection, PageHeader } from "../../components/ui";
 import { fetchAllPages } from "../../utils/apiData";
 
 const emptyForm = { organization_id: "", name: "", address: "", active: true };
@@ -77,19 +78,13 @@ function UnitsForm() {
   if (loading) return <Loading message="Carregando unidade..." />;
   return (
     <section>
-      <div className="mb-4">
-        <h1 className="h3 mb-1">
-          {isEditing ? "Editar Unidade" : "Nova Unidade"}
-        </h1>
-        <p className="text-secondary mb-0">
-          Vincule a unidade a uma organização.
-        </p>
-      </div>
+      <PageHeader title={isEditing ? "Editar Unidade" : "Nova Unidade"} description="Vincule a unidade a uma organização." />
       <AlertMessage
         type={alert?.type}
         message={alert?.message}
         errors={alert?.errors}
       />
+      <FormSection>
       <form className="row g-3" onSubmit={submitForm}>
         <div className="col-md-6">
           <label className="form-label" htmlFor="organization_id">
@@ -151,15 +146,16 @@ function UnitsForm() {
             </label>
           </div>
         </div>
-        <div className="col-12 d-flex gap-2">
+        <FormActions>
           <button className="btn btn-primary" type="submit" disabled={saving}>
             {saving ? "Salvando..." : "Salvar"}
           </button>
           <Link className="btn btn-outline-secondary" to="/units">
             Cancelar
           </Link>
-        </div>
+        </FormActions>
       </form>
+      </FormSection>
     </section>
   );
 }

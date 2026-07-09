@@ -1,17 +1,13 @@
 :root {
   font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
-  color: #1f2937;
-  background: #f8fafc;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  color: #172033;
+  background: #f3f6fa;
 }
 
 body {
   margin: 0;
   min-width: 320px;
-  background: #f8fafc;
+  background: #f3f6fa;
 }
 
 h1,
@@ -21,6 +17,178 @@ p {
 
 .table {
   --bs-table-bg: #ffffff;
+}
+
+.navbar {
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+}
+
+.page-container {
+  display: grid;
+  gap: 1.35rem;
+}
+
+.page-header {
+  align-items: flex-start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.page-header-main {
+  min-width: 0;
+}
+
+.page-title {
+  color: #101828;
+  font-size: 1.65rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.page-description {
+  color: #667085;
+  margin-top: 0.35rem;
+}
+
+.page-header-actions,
+.page-actions,
+.form-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.app-breadcrumb {
+  font-size: 0.875rem;
+  margin-bottom: 0.35rem;
+}
+
+.app-card {
+  border: 1px solid #dfe5ef;
+  border-radius: 0.65rem;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.055);
+}
+
+.app-card > .card-header,
+.app-card-header {
+  background: #fff;
+  border-bottom-color: #e6ebf2;
+  font-weight: 650;
+}
+
+.app-card-body {
+  padding: 1.25rem;
+}
+
+.card {
+  border-color: #dfe5ef;
+  border-radius: 0.65rem;
+}
+
+.card-body {
+  padding: 1.25rem;
+}
+
+.btn {
+  border-radius: 0.45rem;
+  font-weight: 500;
+}
+
+.form-control,
+.form-select {
+  border-color: #d5dbe7;
+  border-radius: 0.45rem;
+}
+
+.form-label {
+  color: #243047;
+  font-weight: 600;
+}
+
+.form-section-heading {
+  border-bottom: 1px solid #e6ebf2;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+}
+
+.form-section-heading h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.form-section-heading p {
+  color: #667085;
+  margin-top: 0.25rem;
+}
+
+.form-actions {
+  border-top: 1px solid #e6ebf2;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  width: 100%;
+}
+
+.status-badge {
+  min-width: 2.25rem;
+}
+
+.empty-state {
+  align-items: center;
+  color: #667085;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  justify-content: center;
+  min-height: 7rem;
+  text-align: center;
+  width: 100%;
+}
+
+.empty-state .bi {
+  color: #98a2b3;
+  font-size: 1.6rem;
+}
+
+.empty-state-title {
+  color: #344054;
+  font-weight: 650;
+}
+
+.empty-state-description {
+  color: #667085;
+  font-size: 0.925rem;
+  margin-top: 0.1rem;
+}
+
+.loading-inline,
+.loading-overlay {
+  align-items: center;
+  color: #475467;
+  display: flex;
+  gap: 0.65rem;
+}
+
+.loading-inline {
+  justify-content: center;
+  min-height: 10rem;
+}
+
+.loading-overlay {
+  background: rgba(255, 255, 255, 0.82);
+  inset: 0;
+  justify-content: center;
+  position: absolute;
+  z-index: 20;
+}
+
+.confirm-modal .modal-backdrop {
+  z-index: -1;
 }
 
 .data-table-page-size {
@@ -55,6 +223,40 @@ p {
   padding: 0;
 }
 
+.data-table {
+  overflow: hidden;
+}
+
+.data-table .card-body {
+  padding: 1rem;
+}
+
+.data-table-frame {
+  border: 1px solid #e6ebf2;
+  border-radius: 0.55rem;
+  margin-bottom: 1rem;
+}
+
+.data-table .table {
+  margin-bottom: 0;
+}
+
+.data-table thead th {
+  background: #f8fafc;
+  border-bottom-color: #dfe5ef;
+  color: #344054;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.data-table tbody td {
+  border-color: #edf1f6;
+}
+
+.data-table .table-striped > tbody > tr:nth-of-type(odd) > * {
+  --bs-table-bg-type: #fbfcfe;
+}
+
 .auth-page {
   min-height: 100svh;
   display: grid;
@@ -64,4 +266,15 @@ p {
 
 .auth-card {
   width: min(420px, 100%);
+}
+
+@media (max-width: 767.98px) {
+  .page-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .page-header-actions {
+    justify-content: flex-start;
+  }
 }

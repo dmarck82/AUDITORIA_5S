@@ -26,7 +26,7 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="mainNavbar">
           {isAuthenticated && (
             <>
-              <NavbarMenu can={can} />
+              <NavbarMenu can={can} onLogout={handleLogout} />
               <div className="d-flex align-items-center gap-3">
                 <span className="navbar-text">{personName}</span>
                 <span className="navbar-text">{accessLevelName}</span>

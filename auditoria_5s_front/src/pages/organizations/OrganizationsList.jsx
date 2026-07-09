@@ -4,6 +4,8 @@ import api from '../../api/axios'
 import AlertMessage from '../../components/AlertMessage'
 import DataTable from '../../components/DataTable'
 import Loading from '../../components/Loading'
+import TableActions from '../../components/TableActions'
+import { PageActions, PageHeader, StatusBadge } from '../../components/ui'
 import { fetchAllPages } from '../../utils/apiData'
 import { useAuth } from '../../auth/useAuth'
 
@@ -52,7 +54,7 @@ function OrganizationsList() {
     {
       key: 'active',
       label: 'Ativo',
-      render: (organization) => <span className={`badge text-bg-${organization.active ? 'success' : 'secondary'}`}>{organization.active ? 'Sim' : 'Não'}</span>,
+      render: (organization) => <StatusBadge status={organization.active ? 'active' : 'inactive'}>{organization.active ? 'Sim' : 'Não'}</StatusBadge>,
       searchValue: (organization) => (organization.active ? 'Sim Ativo' : 'Não Inativo'),
       sortValue: (organization) => (organization.active ? 'Sim' : 'Não'),
     },
@@ -62,26 +64,26 @@ function OrganizationsList() {
       className: 'text-end',
       sortable: false,
       render: (organization) => (
-        <div className="btn-group btn-group-sm">
-          <Link className="btn btn-outline-secondary" to={`/organizations/${organization.id}`}>Ver</Link>
-          {can('organizations.update') && <Link className="btn btn-outline-primary" to={`/organizations/${organization.id}/edit`}>Editar</Link>}
-          {can('organizations.delete') && <button className="btn btn-outline-danger" type="button" onClick={() => deleteOrganization(organization)}>Excluir</button>}
-        </div>
+        <TableActions actions={[
+          { label: 'Ver', to: `/organizations/${organization.id}`, type: 'view' },
+          can('organizations.update') && { label: 'Editar', to: `/organizations/${organization.id}/edit`, type: 'edit' },
+          can('organizations.delete') && { label: 'Excluir', onClick: () => deleteOrganization(organization), type: 'delete' },
+        ]} />
       ),
     },
   ]
 
   return (
     <section>
-      <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-        <div>
-          <h1 className="h3 mb-1">Organizações</h1>
-          <p className="text-secondary mb-0">Gerencie empresas cadastradas.</p>
-        </div>
-        {can('organizations.create') && <Link className="btn btn-primary" to="/organizations/create">
-          Nova Organização
-        </Link>}
-      </div>
+      <PageHeader
+        title="Organizações"
+        description="Gerencie empresas cadastradas."
+        actions={can('organizations.create') && (
+          <PageActions>
+            <Link className="btn btn-primary" to="/organizations/create">Nova Organização</Link>
+          </PageActions>
+        )}
+      />
 
       <AlertMessage type={alert?.type} message={alert?.message} />
 

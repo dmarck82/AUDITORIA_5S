@@ -4,6 +4,8 @@ import api from '../../api/axios'
 import AlertMessage from '../../components/AlertMessage'
 import DataTable from '../../components/DataTable'
 import Loading from '../../components/Loading'
+import TableActions from '../../components/TableActions'
+import { PageActions, PageHeader, StatusBadge } from '../../components/ui'
 import { useAuth } from '../../auth/useAuth'
 import { fetchAllPages, getRelatedName } from '../../utils/apiData'
 
@@ -39,7 +41,7 @@ function SectorsList() {
     {
       key: 'active',
       label: 'Ativo',
-      render: (sector) => <span className={`badge text-bg-${sector.active ? 'success' : 'secondary'}`}>{sector.active ? 'Sim' : 'Não'}</span>,
+      render: (sector) => <StatusBadge status={sector.active ? 'active' : 'inactive'}>{sector.active ? 'Sim' : 'Não'}</StatusBadge>,
       searchValue: (sector) => (sector.active ? 'Sim Ativo' : 'Não Inativo'),
       sortValue: (sector) => (sector.active ? 'Sim' : 'Não'),
     },
@@ -48,11 +50,29 @@ function SectorsList() {
       label: 'Ações',
       className: 'text-end',
       sortable: false,
-      render: (sector) => <div className="btn-group btn-group-sm"><Link className="btn btn-outline-secondary" to={`/sectors/${sector.id}`}>Ver</Link>{can('sectors.update') && <Link className="btn btn-outline-primary" to={`/sectors/${sector.id}/edit`}>Editar</Link>}{can('sectors.delete') && <button className="btn btn-outline-danger" type="button" onClick={() => deleteSector(sector)}>Excluir</button>}</div>,
+      render: (sector) => <TableActions actions={[
+        { label: 'Ver', to: `/sectors/${sector.id}`, type: 'view' },
+        can('sectors.update') && { label: 'Editar', to: `/sectors/${sector.id}/edit`, type: 'edit' },
+        can('sectors.delete') && { label: 'Excluir', onClick: () => deleteSector(sector), type: 'delete' },
+      ]} />,
     },
   ]
 
-  return <section><div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4"><div><h1 className="h3 mb-1">Setores</h1><p className="text-secondary mb-0">Gerencie áreas avaliáveis.</p></div>{can('sectors.create') && <Link className="btn btn-primary" to="/sectors/create">Novo Setor</Link>}</div><AlertMessage type={alert?.type} message={alert?.message} />{loading ? <Loading message="Carregando setores..." /> : <DataTable columns={columns} rows={sectors} emptyMessage="Nenhum setor encontrado." />}</section>
+  return (
+    <section>
+      <PageHeader
+        title="Setores"
+        description="Gerencie áreas avaliáveis."
+        actions={can('sectors.create') && (
+          <PageActions>
+            <Link className="btn btn-primary" to="/sectors/create">Novo Setor</Link>
+          </PageActions>
+        )}
+      />
+      <AlertMessage type={alert?.type} message={alert?.message} />
+      {loading ? <Loading message="Carregando setores..." /> : <DataTable columns={columns} rows={sectors} emptyMessage="Nenhum setor encontrado." />}
+    </section>
+  )
 }
 
 export default SectorsList

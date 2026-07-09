@@ -4,6 +4,8 @@ import api from "../../api/axios";
 import AlertMessage from "../../components/AlertMessage";
 import DataTable from "../../components/DataTable";
 import Loading from "../../components/Loading";
+import TableActions from "../../components/TableActions";
+import { PageActions, PageHeader, StatusBadge } from "../../components/ui";
 import { useAuth } from "../../auth/useAuth";
 import { fetchAllPages } from "../../utils/apiData";
 
@@ -65,9 +67,9 @@ function UnitsList() {
       key: "active",
       label: "Ativo",
       render: (unit) => (
-        <span className={`badge text-bg-${unit.active ? "success" : "secondary"}`}>
+        <StatusBadge status={unit.active ? "active" : "inactive"}>
           {unit.active ? "Sim" : "Não"}
-        </span>
+        </StatusBadge>
       ),
       searchValue: (unit) => (unit.active ? "Sim Ativo" : "Não Inativo"),
       sortValue: (unit) => (unit.active ? "Sim" : "Não"),
@@ -78,32 +80,26 @@ function UnitsList() {
       className: "text-end",
       sortable: false,
       render: (unit) => (
-        <div className="btn-group btn-group-sm">
-          <Link className="btn btn-outline-secondary" to={`/units/${unit.id}`}>
-            Ver
-          </Link>
-          {can("units.update") && <Link className="btn btn-outline-primary" to={`/units/${unit.id}/edit`}>
-            Editar
-          </Link>}
-          {can("units.delete") && <button className="btn btn-outline-danger" type="button" onClick={() => deleteUnit(unit)}>
-            Excluir
-          </button>}
-        </div>
+        <TableActions actions={[
+          { label: "Ver", to: `/units/${unit.id}`, type: "view" },
+          can("units.update") && { label: "Editar", to: `/units/${unit.id}/edit`, type: "edit" },
+          can("units.delete") && { label: "Excluir", onClick: () => deleteUnit(unit), type: "delete" },
+        ]} />
       ),
     },
   ];
 
   return (
     <section>
-      <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-        <div>
-          <h1 className="h3 mb-1">Unidades</h1>
-          <p className="text-secondary mb-0">Gerencie filiais e plantas.</p>
-        </div>
-        {can("units.create") && <Link className="btn btn-primary" to="/units/create">
-          Nova Unidade
-        </Link>}
-      </div>
+      <PageHeader
+        title="Unidades"
+        description="Gerencie filiais e plantas."
+        actions={can("units.create") && (
+          <PageActions>
+            <Link className="btn btn-primary" to="/units/create">Nova Unidade</Link>
+          </PageActions>
+        )}
+      />
       <AlertMessage type={alert?.type} message={alert?.message} />
       {loading ? (
         <Loading message="Carregando unidades..." />

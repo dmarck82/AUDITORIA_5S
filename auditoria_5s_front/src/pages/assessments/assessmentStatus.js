@@ -25,3 +25,17 @@ export function toDateTimeLocalValue(value) {
 
   return offsetDate.toISOString().slice(0, 16)
 }
+
+export function dateTimeLocalToIso(value) {
+  if (!value) {
+    return null
+  }
+
+  const date = new Date(value)
+
+  if (Number.isNaN(date.getTime())) {
+    return null
+  }
+
+  return date.toISOString()
+}

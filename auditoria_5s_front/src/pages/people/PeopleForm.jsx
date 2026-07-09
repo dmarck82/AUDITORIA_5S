@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../api/axios";
 import AlertMessage from "../../components/AlertMessage";
 import Loading from "../../components/Loading";
+import { FormActions, FormSection, PageHeader } from "../../components/ui";
 import { fetchAllPages } from "../../utils/apiData";
 import { formatPhone, onlyDigits } from "../../utils/formatters";
 
@@ -170,17 +171,13 @@ function PeopleForm() {
 
   return (
     <section>
-      <div className="mb-4">
-        <h1 className="h3 mb-1">
-          {isEditing ? "Editar Pessoa" : "Nova Pessoa"}
-        </h1>
-        <p className="text-secondary mb-0">Preencha os dados cadastrais.</p>
-      </div>
+      <PageHeader title={isEditing ? "Editar Pessoa" : "Nova Pessoa"} description="Preencha os dados cadastrais." />
       <AlertMessage
         type={alert?.type}
         message={alert?.message}
         errors={alert?.errors}
       />
+      <FormSection>
       <form className="row g-3" onSubmit={submitForm}>
         <div className="col-md-8">
           <label className="form-label" htmlFor="name">
@@ -325,15 +322,16 @@ function PeopleForm() {
             </label>
           </div>
         </div>
-        <div className="col-12 d-flex gap-2">
+        <FormActions>
           <button className="btn btn-primary" type="submit" disabled={saving}>
             {saving ? "Salvando..." : "Salvar"}
           </button>
           <Link className="btn btn-outline-secondary" to="/people">
             Cancelar
           </Link>
-        </div>
+        </FormActions>
       </form>
+      </FormSection>
     </section>
   );
 }

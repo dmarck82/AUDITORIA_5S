@@ -4,6 +4,7 @@ import api from '../../api/axios'
 import { useAuth } from '../../auth/useAuth'
 import AlertMessage from '../../components/AlertMessage'
 import Loading from '../../components/Loading'
+import { Card, PageActions, PageHeader, StatusBadge } from '../../components/ui'
 import { formatDateTime } from '../../utils/formatters'
 
 function QuestionnairesView() {
@@ -34,28 +35,28 @@ function QuestionnairesView() {
 
   return (
     <section>
-      <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-        <div>
-          <h1 className="h3 mb-1">Detalhes do Questionário</h1>
-          <p className="text-secondary mb-0">Informações do modelo de perguntas.</p>
-        </div>
-        <div className="d-flex gap-2">
+      <PageHeader
+        title="Detalhes do Questionário"
+        description="Informações do modelo de perguntas."
+        actions={(
+          <PageActions>
           <Link className="btn btn-outline-secondary" to="/questionnaires">Voltar</Link>
           {questionnaire && can('questions.view') && <Link className="btn btn-outline-secondary" to={`/questions?questionnaire_id=${questionnaire.id}`}>Ver Perguntas</Link>}
           {questionnaire && can('questionnaires.update') && <Link className="btn btn-primary" to={`/questionnaires/${questionnaire.id}/edit`}>Editar</Link>}
-        </div>
-      </div>
+          </PageActions>
+        )}
+      />
       <AlertMessage type={alert?.type} message={alert?.message} />
       {questionnaire && (
-        <div className="card"><div className="card-body"><dl className="row mb-0">
+        <Card><dl className="row mb-0">
           <dt className="col-sm-3">Nome</dt><dd className="col-sm-9">{questionnaire.name || '-'}</dd>
           <dt className="col-sm-3">Descrição</dt><dd className="col-sm-9">{questionnaire.description || '-'}</dd>
           <dt className="col-sm-3">Perguntas</dt><dd className="col-sm-9">{questionnaire.questions_count ?? 0}</dd>
-          <dt className="col-sm-3">Ativo</dt><dd className="col-sm-9">{questionnaire.active ? 'Sim' : 'Não'}</dd>
+          <dt className="col-sm-3">Ativo</dt><dd className="col-sm-9"><StatusBadge status={questionnaire.active ? 'active' : 'inactive'}>{questionnaire.active ? 'Sim' : 'Não'}</StatusBadge></dd>
           <dt className="col-sm-3">Criado em</dt><dd className="col-sm-9">{formatDateTime(questionnaire.created_at)}</dd>
           <dt className="col-sm-3">Atualizado em</dt><dd className="col-sm-9">{formatDateTime(questionnaire.updated_at)}</dd>
           <dt className="col-sm-3">Atualizado por</dt><dd className="col-sm-9">{questionnaire.updated_by_name || '-'}</dd>
-        </dl></div></div>
+        </dl></Card>
       )}
     </section>
   )
