@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Sector extends Model
+class Process extends Model
 {
     use HasFactory, TracksUpdatedBy;
 
     protected $fillable = [
-        'unit_id',
+        'sector_id',
         'name',
         'description',
         'active',
@@ -27,18 +27,13 @@ class Sector extends Model
         ];
     }
 
-    public function unit(): BelongsTo
+    public function sector(): BelongsTo
     {
-        return $this->belongsTo(Unit::class);
+        return $this->belongsTo(Sector::class);
     }
 
-    public function people(): HasMany
+    public function activities(): HasMany
     {
-        return $this->hasMany(Person::class);
-    }
-
-    public function processes(): HasMany
-    {
-        return $this->hasMany(Process::class);
+        return $this->hasMany(Activity::class)->orderBy('sort_order');
     }
 }

@@ -20,8 +20,10 @@ class DatabaseSeeder extends Seeder
             AdminUserSeeder::class,
             DemoDataSeeder::class,
             RelationshipSeeder::class,
+            MethodologySeeder::class,
             QuestionnairesSeeder::class,
             QuestionsSeeder::class,
+            ProcessesAndActivitiesSeeder::class,
             AssessmentSeeder::class,
         ]);
     }

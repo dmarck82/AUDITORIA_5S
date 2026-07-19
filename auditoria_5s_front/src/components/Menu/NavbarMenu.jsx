@@ -11,6 +11,7 @@ const menuItems = [
       { label: 'Organizações', path: '/organizations', permission: 'organizations.view' },
       { label: 'Unidades', path: '/units', permission: 'units.view' },
       { label: 'Setores', path: '/sectors', permission: 'sectors.view' },
+      { label: 'Processos', path: '/processes', permission: 'processes.view' },
       { label: 'Pessoas', path: '/people', permission: 'people.view' },
       { label: 'Usuários', path: '/users', permission: 'users.view' },
     ],
@@ -18,6 +19,7 @@ const menuItems = [
   {
     label: 'Modelos',
     items: [
+      { label: 'Metodologias', path: '/methodologies', permission: 'methodologies.view' },
       { label: 'Questionários', path: '/questionnaires', permission: 'questionnaires.view' },
       { label: 'Perguntas', path: '/questions', permission: 'questions.view' },
     ],

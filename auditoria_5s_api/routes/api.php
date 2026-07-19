@@ -1,9 +1,11 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\AssessmentController;
+use App\Http\Controllers\Api\MethodologyController;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\PersonController;
+use App\Http\Controllers\Api\ProcessController;
 use App\Http\Controllers\Api\PublicAssessmentController;
 use App\Http\Controllers\Api\PublicAssessmentEvidenceController;
 use App\Http\Controllers\Api\QuestionController;
@@ -11,11 +13,12 @@ use App\Http\Controllers\Api\QuestionnaireController;
 use App\Http\Controllers\Api\SectorController;
 use App\Http\Controllers\Api\UnitController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/hello', function () {
     return response()->json([
-        'message' => 'Olá, mundo!'
+        'message' => 'Olá, mundo!',
     ]);
 });
 
@@ -50,6 +53,25 @@ Route::middleware('auth:api')->group(function () {
     Route::get('sectors/{sector}', [SectorController::class, 'show'])->middleware('permission:sectors.view');
     Route::match(['put', 'patch'], 'sectors/{sector}', [SectorController::class, 'update'])->middleware('permission:sectors.update');
     Route::delete('sectors/{sector}', [SectorController::class, 'destroy'])->middleware('permission:sectors.delete');
+
+    Route::get('processes', [ProcessController::class, 'index'])->middleware('permission:processes.view');
+    Route::post('processes', [ProcessController::class, 'store'])->middleware('permission:processes.create');
+    Route::get('processes/{process}', [ProcessController::class, 'show'])->middleware('permission:processes.view');
+    Route::match(['put', 'patch'], 'processes/{process}', [ProcessController::class, 'update'])->middleware('permission:processes.update');
+    Route::delete('processes/{process}', [ProcessController::class, 'destroy'])->middleware('permission:processes.delete');
+
+    Route::get('activities', [ActivityController::class, 'index'])->middleware('permission:activities.view');
+    Route::post('activities', [ActivityController::class, 'store'])->middleware('permission:activities.create');
+    Route::post('activities/reorder', [ActivityController::class, 'reorder'])->middleware('permission:activities.update');
+    Route::get('activities/{activity}', [ActivityController::class, 'show'])->middleware('permission:activities.view');
+    Route::match(['put', 'patch'], 'activities/{activity}', [ActivityController::class, 'update'])->middleware('permission:activities.update');
+    Route::delete('activities/{activity}', [ActivityController::class, 'destroy'])->middleware('permission:activities.delete');
+
+    Route::get('methodologies', [MethodologyController::class, 'index'])->middleware('permission:methodologies.view');
+    Route::post('methodologies', [MethodologyController::class, 'store'])->middleware('permission:methodologies.create');
+    Route::get('methodologies/{methodology}', [MethodologyController::class, 'show'])->middleware('permission:methodologies.view');
+    Route::match(['put', 'patch'], 'methodologies/{methodology}', [MethodologyController::class, 'update'])->middleware('permission:methodologies.update');
+    Route::delete('methodologies/{methodology}', [MethodologyController::class, 'destroy'])->middleware('permission:methodologies.delete');
 
     Route::get('people', [PersonController::class, 'index'])->middleware('permission:people.view');
     Route::post('people', [PersonController::class, 'store'])->middleware('permission:people.create');

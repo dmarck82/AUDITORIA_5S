@@ -51,6 +51,12 @@ class SectorController extends Controller
             ], 409);
         }
 
+        if ($sector->processes()->exists()) {
+            return response()->json([
+                'message' => 'This sector cannot be deleted because it has processes linked to it.',
+            ], 409);
+        }
+
         $sector->delete();
 
         return response()->noContent();

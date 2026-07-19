@@ -6,6 +6,8 @@ const HOME_ROUTES = [
   { permission: 'organizations.view', path: '/organizations' },
   { permission: 'units.view', path: '/units' },
   { permission: 'sectors.view', path: '/sectors' },
+  { permission: 'processes.view', path: '/processes' },
+  { permission: 'methodologies.view', path: '/methodologies' },
   { permission: 'users.view', path: '/users' },
 ]
 

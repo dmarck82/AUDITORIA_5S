@@ -7,12 +7,19 @@ import AssessmentForm from '../pages/assessments/AssessmentForm'
 import AssessmentsList from '../pages/assessments/AssessmentsList'
 import AssessmentView from '../pages/assessments/AssessmentView'
 import Login from '../pages/auth/Login'
+import MethodologiesForm from '../pages/methodologies/MethodologiesForm'
+import MethodologiesList from '../pages/methodologies/MethodologiesList'
+import MethodologiesView from '../pages/methodologies/MethodologiesView'
 import OrganizationsForm from '../pages/organizations/OrganizationsForm'
 import OrganizationsList from '../pages/organizations/OrganizationsList'
 import OrganizationsView from '../pages/organizations/OrganizationsView'
+import ActivitiesForm from '../pages/activities/ActivitiesForm'
 import PeopleForm from '../pages/people/PeopleForm'
 import PeopleList from '../pages/people/PeopleList'
 import PeopleView from '../pages/people/PeopleView'
+import ProcessesForm from '../pages/processes/ProcessesForm'
+import ProcessesList from '../pages/processes/ProcessesList'
+import ProcessesView from '../pages/processes/ProcessesView'
 import PublicAssessmentAnswer from '../pages/public/PublicAssessmentAnswer'
 import QuestionsForm from '../pages/questions/QuestionsForm'
 import QuestionsList from '../pages/questions/QuestionsList'
@@ -71,6 +78,23 @@ function AppRoutes() {
             <Route path="sectors/:id/edit" element={<SectorsForm />} />
           </Route>
 
+          <Route element={<PermissionRoute permission="processes.view" />}>
+            <Route path="processes" element={<ProcessesList />} />
+            <Route path="processes/:id" element={<ProcessesView />} />
+          </Route>
+          <Route element={<PermissionRoute permission="processes.create" />}>
+            <Route path="processes/create" element={<ProcessesForm />} />
+          </Route>
+          <Route element={<PermissionRoute permission="processes.update" />}>
+            <Route path="processes/:id/edit" element={<ProcessesForm />} />
+          </Route>
+          <Route element={<PermissionRoute permission="activities.create" />}>
+            <Route path="processes/:processId/activities/create" element={<ActivitiesForm />} />
+          </Route>
+          <Route element={<PermissionRoute permission="activities.update" />}>
+            <Route path="activities/:id/edit" element={<ActivitiesForm />} />
+          </Route>
+
           <Route element={<PermissionRoute permission="people.view" />}>
             <Route path="people" element={<PeopleList />} />
             <Route path="people/:id" element={<PeopleView />} />
@@ -91,6 +115,17 @@ function AppRoutes() {
           </Route>
           <Route element={<PermissionRoute permission="users.update" />}>
             <Route path="users/:id/edit" element={<UsersForm />} />
+          </Route>
+
+          <Route element={<PermissionRoute permission="methodologies.view" />}>
+            <Route path="methodologies" element={<MethodologiesList />} />
+            <Route path="methodologies/:id" element={<MethodologiesView />} />
+          </Route>
+          <Route element={<PermissionRoute permission="methodologies.create" />}>
+            <Route path="methodologies/create" element={<MethodologiesForm />} />
+          </Route>
+          <Route element={<PermissionRoute permission="methodologies.update" />}>
+            <Route path="methodologies/:id/edit" element={<MethodologiesForm />} />
           </Route>
 
           <Route element={<PermissionRoute permission="questionnaires.view" />}>
