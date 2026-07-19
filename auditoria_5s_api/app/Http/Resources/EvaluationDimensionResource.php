@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MethodologyResource extends JsonResource
+class EvaluationDimensionResource extends JsonResource
 {
     /**
      * @return array<string, mixed>
@@ -14,12 +14,13 @@ class MethodologyResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'methodology_id' => $this->methodology_id,
+            'methodology' => $this->whenLoaded('methodology', fn () => new MethodologyListResource($this->methodology)),
             'code' => $this->code,
             'name' => $this->name,
-            'description' => $this->description,
+            'objective' => $this->objective,
+            'sort_order' => $this->sort_order,
             'active' => $this->active,
-            'evaluation_dimensions_count' => $this->whenCounted('evaluationDimensions'),
-            'evaluation_dimensions' => EvaluationDimensionListResource::collection($this->whenLoaded('evaluationDimensions')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'updated_by' => $this->updated_by,

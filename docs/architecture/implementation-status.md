@@ -16,7 +16,7 @@ docs/tasks/templates
 Estado confirmado:
 
 - existe exatamente uma tarefa em `docs/tasks/active`;
-- tarefas 00, 01 e 02 estão em `docs/tasks/completed`;
+- tarefas 00, 01, 02 e 03 estão em `docs/tasks/completed`;
 - tarefas funcionais seguintes estão em `docs/tasks/pending`;
 - `docs/tasks/templates/00-encerrar-tarefa.md` permanece como procedimento permanente.
 
@@ -82,14 +82,39 @@ Fatos confirmados:
 - o frontend possui listagem, criação, edição e visualização de metodologias;
 - dimensões, critérios e supervisões permanecem fora do escopo.
 
+
+## Fase 3 — Dimensões de avaliação
+
+Status: concluída.
+
+Escopo implementado:
+
+```text
+Metodologia
+└── Dimensão de avaliação
+```
+
+Fatos confirmados:
+
+- `evaluation_dimensions` pertence a `methodologies` por `methodology_id`;
+- dimensões possuem `code`, `name`, `objective`, `sort_order`, `active`, timestamps e `updated_by`;
+- `code` é obrigatório, normalizado para maiúsculas e único dentro da metodologia;
+- há Model, Factory, Form Requests, Resources, controller, rotas e permissões para dimensões;
+- há endpoint de reordenação por metodologia;
+- `Methodology` possui relacionamento `evaluationDimensions`;
+- a exclusão de metodologia com dimensões retorna conflito;
+- o frontend possui listagem, criação, edição e visualização de dimensões;
+- o detalhe de metodologia permite criar, editar, excluir e reordenar dimensões;
+- modelos de avaliação, critérios e supervisões permanecem fora do escopo.
+
 ## Validações conhecidas
 
-Validações executadas na tarefa 02:
+Validações executadas na tarefa 03:
 
 - sintaxe PHP dos arquivos alterados;
 - Pint nos arquivos PHP alterados;
 - `php artisan migrate --pretend`;
-- `php artisan route:list --path=methodologies`;
+- `php artisan route:list --path=evaluation-dimensions`;
 - `npm run lint`;
 - `npm run build`.
 
@@ -99,17 +124,17 @@ Limitação de ambiente:
 
 ## Tarefa ativa
 
-Cadastro administrativo de dimensões de avaliação.
+Cadastro administrativo de modelos de avaliação.
 
 Arquivo:
 
 ```text
-docs/tasks/active/03-dimensoes-avaliacao.md
+docs/tasks/active/04-modelos-avaliacao.md
 ```
 
 ## Próxima fase funcional
 
-Iniciar o cadastro de dimensões vinculadas a metodologias, sem implementar modelos, critérios ou supervisões.
+Iniciar o cadastro de modelos de avaliação reutilizáveis, sem implementar opções dos modelos, critérios ou execução.
 
 ## Observação
 

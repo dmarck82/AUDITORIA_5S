@@ -18,6 +18,7 @@ class MethodologyListResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'active' => $this->active,
+            'evaluation_dimensions_count' => $this->whenCounted('evaluationDimensions'),
             'updated_by_name' => $this->whenLoaded('updatedBy', fn () => $this->updatedBy?->name),
         ];
     }

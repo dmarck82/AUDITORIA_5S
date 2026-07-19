@@ -7,6 +7,9 @@ import AssessmentForm from '../pages/assessments/AssessmentForm'
 import AssessmentsList from '../pages/assessments/AssessmentsList'
 import AssessmentView from '../pages/assessments/AssessmentView'
 import Login from '../pages/auth/Login'
+import EvaluationDimensionsForm from '../pages/evaluationDimensions/EvaluationDimensionsForm'
+import EvaluationDimensionsList from '../pages/evaluationDimensions/EvaluationDimensionsList'
+import EvaluationDimensionsView from '../pages/evaluationDimensions/EvaluationDimensionsView'
 import MethodologiesForm from '../pages/methodologies/MethodologiesForm'
 import MethodologiesList from '../pages/methodologies/MethodologiesList'
 import MethodologiesView from '../pages/methodologies/MethodologiesView'
@@ -126,6 +129,19 @@ function AppRoutes() {
           </Route>
           <Route element={<PermissionRoute permission="methodologies.update" />}>
             <Route path="methodologies/:id/edit" element={<MethodologiesForm />} />
+          </Route>
+
+
+          <Route element={<PermissionRoute permission="evaluation_dimensions.view" />}>
+            <Route path="evaluation-dimensions" element={<EvaluationDimensionsList />} />
+            <Route path="evaluation-dimensions/:id" element={<EvaluationDimensionsView />} />
+          </Route>
+          <Route element={<PermissionRoute permission="evaluation_dimensions.create" />}>
+            <Route path="evaluation-dimensions/create" element={<EvaluationDimensionsForm />} />
+            <Route path="methodologies/:methodologyId/evaluation-dimensions/create" element={<EvaluationDimensionsForm />} />
+          </Route>
+          <Route element={<PermissionRoute permission="evaluation_dimensions.update" />}>
+            <Route path="evaluation-dimensions/:id/edit" element={<EvaluationDimensionsForm />} />
           </Route>
 
           <Route element={<PermissionRoute permission="questionnaires.view" />}>

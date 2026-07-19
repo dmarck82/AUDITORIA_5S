@@ -20,6 +20,7 @@ const menuItems = [
     label: 'Modelos',
     items: [
       { label: 'Metodologias', path: '/methodologies', permission: 'methodologies.view' },
+      { label: 'Dimensões', path: '/evaluation-dimensions', permission: 'evaluation_dimensions.view' },
       { label: 'Questionários', path: '/questionnaires', permission: 'questionnaires.view' },
       { label: 'Perguntas', path: '/questions', permission: 'questions.view' },
     ],

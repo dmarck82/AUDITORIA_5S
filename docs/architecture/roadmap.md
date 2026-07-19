@@ -8,8 +8,8 @@
 | 01 | Processos e atividades | Concluída |
 | N01 | Normalização definitiva | Concluída |
 | 02 | Metodologias | Concluída |
-| 03 | Dimensões de avaliação | Ativa |
-| 04 | Modelos de avaliação | Pendente |
+| 03 | Dimensões de avaliação | Concluída |
+| 04 | Modelos de avaliação | Ativa |
 | 05 | Opções dos modelos | Pendente |
 | 06 | Critérios universais | Pendente |
 | 07 | Associação atividade-critério | Pendente |

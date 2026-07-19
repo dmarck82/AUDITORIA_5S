@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\AssessmentController;
+use App\Http\Controllers\Api\EvaluationDimensionController;
 use App\Http\Controllers\Api\MethodologyController;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\PersonController;
@@ -72,6 +73,13 @@ Route::middleware('auth:api')->group(function () {
     Route::get('methodologies/{methodology}', [MethodologyController::class, 'show'])->middleware('permission:methodologies.view');
     Route::match(['put', 'patch'], 'methodologies/{methodology}', [MethodologyController::class, 'update'])->middleware('permission:methodologies.update');
     Route::delete('methodologies/{methodology}', [MethodologyController::class, 'destroy'])->middleware('permission:methodologies.delete');
+
+    Route::get('evaluation-dimensions', [EvaluationDimensionController::class, 'index'])->middleware('permission:evaluation_dimensions.view');
+    Route::post('evaluation-dimensions', [EvaluationDimensionController::class, 'store'])->middleware('permission:evaluation_dimensions.create');
+    Route::post('evaluation-dimensions/reorder', [EvaluationDimensionController::class, 'reorder'])->middleware('permission:evaluation_dimensions.update');
+    Route::get('evaluation-dimensions/{evaluationDimension}', [EvaluationDimensionController::class, 'show'])->middleware('permission:evaluation_dimensions.view');
+    Route::match(['put', 'patch'], 'evaluation-dimensions/{evaluationDimension}', [EvaluationDimensionController::class, 'update'])->middleware('permission:evaluation_dimensions.update');
+    Route::delete('evaluation-dimensions/{evaluationDimension}', [EvaluationDimensionController::class, 'destroy'])->middleware('permission:evaluation_dimensions.delete');
 
     Route::get('people', [PersonController::class, 'index'])->middleware('permission:people.view');
     Route::post('people', [PersonController::class, 'store'])->middleware('permission:people.create');

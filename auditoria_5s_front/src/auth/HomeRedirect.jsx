@@ -8,6 +8,7 @@ const HOME_ROUTES = [
   { permission: 'sectors.view', path: '/sectors' },
   { permission: 'processes.view', path: '/processes' },
   { permission: 'methodologies.view', path: '/methodologies' },
+  { permission: 'evaluation_dimensions.view', path: '/evaluation-dimensions' },
   { permission: 'users.view', path: '/users' },
 ]
 

@@ -2,7 +2,34 @@
 
 ## Status
 
-ATIVA.
+CONCLUÍDA.
+
+Data de conclusão: 2026-07-19.
+
+## Resultado
+
+- CRUD administrativo de dimensões de avaliação implementado no backend e frontend.
+- Dimensão vinculada obrigatoriamente a metodologia.
+- Código de dimensão obrigatório, normalizado para maiúsculas e único dentro da metodologia.
+- Dimensão possui nome, objetivo, ordem e status ativo.
+- Permissões de visualização, criação, edição e exclusão adicionadas.
+- Endpoint e tela de reordenação por metodologia implementados.
+- Modelos, critérios e supervisões não foram implementados.
+
+## Validações executadas
+
+- `php -l` nos arquivos PHP alterados e criados.
+- `php vendor/bin/pint` nos arquivos PHP alterados e criados.
+- `php artisan migrate --pretend`.
+- `php artisan route:list --path=evaluation-dimensions`.
+- `php artisan test` executado, mas bloqueado por ausência de `pdo_sqlite` no ambiente.
+- `npm run lint` executado com sucesso, mantendo dois avisos preexistentes em `src/pages/assessments/AssessmentsList.jsx`.
+- `npm run build` executado com sucesso, com aviso de chunk acima de 500 kB.
+
+## Pendências residuais
+
+- Habilitar `pdo_sqlite` no PHP do ambiente para executar a suíte backend completa.
+
 
 ## Objetivo
 

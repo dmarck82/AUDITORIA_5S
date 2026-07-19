@@ -5,29 +5,33 @@ namespace App\Models;
 use App\Models\Concerns\TracksUpdatedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Methodology extends Model
+class EvaluationDimension extends Model
 {
     use HasFactory, TracksUpdatedBy;
 
     protected $fillable = [
+        'methodology_id',
         'code',
         'name',
-        'description',
+        'objective',
+        'sort_order',
         'active',
     ];
 
     protected function casts(): array
     {
         return [
+            'methodology_id' => 'integer',
+            'sort_order' => 'integer',
             'active' => 'boolean',
             'updated_by' => 'integer',
         ];
     }
 
-    public function evaluationDimensions(): HasMany
+    public function methodology(): BelongsTo
     {
-        return $this->hasMany(EvaluationDimension::class);
+        return $this->belongsTo(Methodology::class);
     }
 }
