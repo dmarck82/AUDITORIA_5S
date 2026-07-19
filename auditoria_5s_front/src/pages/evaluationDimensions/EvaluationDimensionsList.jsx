@@ -17,6 +17,8 @@ function EvaluationDimensionsList() {
   const location = useLocation()
   const { can } = useAuth()
   const [dimensions, setDimensions] = useState([])
+  const [methodologies, setMethodologies] = useState([])
+  const [methodologyFilter, setMethodologyFilter] = useState('')
   const [loading, setLoading] = useState(true)
   const [alert, setAlert] = useState(location.state?.message ? { type: 'success', message: location.state.message } : null)
 
@@ -27,13 +29,21 @@ function EvaluationDimensionsList() {
     }
 
     try {
-      setDimensions(await fetchAllPages('/evaluation-dimensions'))
+      const [loadedDimensions, loadedMethodologies] = await Promise.all([
+        fetchAllPages('/evaluation-dimensions', {
+          params: methodologyFilter ? { methodology_id: methodologyFilter } : {},
+        }),
+        fetchAllPages('/methodologies'),
+      ])
+
+      setDimensions(loadedDimensions)
+      setMethodologies(loadedMethodologies)
     } catch {
       setAlert({ type: 'danger', message: 'Não foi possível carregar as dimensões.' })
     } finally {
       setLoading(false)
     }
-  }, [location.state?.message])
+  }, [location.state?.message, methodologyFilter])
 
   useEffect(() => {
     loadDimensions()
@@ -91,6 +101,24 @@ function EvaluationDimensionsList() {
       />
 
       <AlertMessage type={alert?.type} message={alert?.message} />
+
+
+      <div className="row g-3 align-items-end mb-3">
+        <div className="col-md-5 col-lg-4">
+          <label className="form-label" htmlFor="methodology-filter">Metodologia</label>
+          <select
+            className="form-select"
+            id="methodology-filter"
+            value={methodologyFilter}
+            onChange={(event) => setMethodologyFilter(event.target.value)}
+          >
+            <option value="">Todas</option>
+            {methodologies.map((methodology) => (
+              <option key={methodology.id} value={methodology.id}>{methodology.code} - {methodology.name}</option>
+            ))}
+          </select>
+        </div>
+      </div>
 
       {loading ? (
         <Loading message="Carregando dimensões..." />

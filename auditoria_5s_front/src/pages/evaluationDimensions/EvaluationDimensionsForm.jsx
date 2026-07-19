@@ -21,6 +21,7 @@ function EvaluationDimensionsForm() {
   const isEditing = Boolean(id)
   const [form, setForm] = useState({ ...emptyForm, methodology_id: methodologyId || '' })
   const [methodologies, setMethodologies] = useState([])
+  const [cancelTo, setCancelTo] = useState(methodologyId ? '/methodologies/' + methodologyId : '/evaluation-dimensions')
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [alert, setAlert] = useState(null)
@@ -42,8 +43,10 @@ function EvaluationDimensionsForm() {
             sort_order: dimension.sort_order || 1,
             active: Boolean(dimension.active),
           })
+          setCancelTo(dimension.methodology_id ? '/methodologies/' + dimension.methodology_id : '/evaluation-dimensions')
         } else if (methodologyId) {
           setForm((currentForm) => ({ ...currentForm, methodology_id: String(methodologyId) }))
+          setCancelTo('/methodologies/' + methodologyId)
         }
       } catch {
         setAlert({ type: 'danger', message: 'Não foi possível carregar os dados da dimensão.' })
@@ -131,7 +134,7 @@ function EvaluationDimensionsForm() {
           </div>
           <FormActions>
             <button className="btn btn-primary" type="submit" disabled={saving}>{saving ? 'Salvando...' : 'Salvar'}</button>
-            <Link className="btn btn-outline-secondary" to={methodologyId ? `/methodologies/${methodologyId}` : '/evaluation-dimensions'}>Cancelar</Link>
+            <Link className="btn btn-outline-secondary" to={cancelTo}>Cancelar</Link>
           </FormActions>
         </form>
       </FormSection>
