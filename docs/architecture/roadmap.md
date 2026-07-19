@@ -9,8 +9,8 @@
 | N01 | Normalização definitiva | Concluída |
 | 02 | Metodologias | Concluída |
 | 03 | Dimensões de avaliação | Concluída |
-| 04 | Modelos de avaliação | Ativa |
-| 05 | Opções dos modelos | Pendente |
+| 04 | Modelos de avaliação | Concluída |
+| 05 | Opções dos modelos | Ativa |
 | 06 | Critérios universais | Pendente |
 | 07 | Associação atividade-critério | Pendente |
 | 08 | Aspectos de verificação | Pendente |

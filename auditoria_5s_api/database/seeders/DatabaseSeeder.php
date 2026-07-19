@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             RelationshipSeeder::class,
             MethodologySeeder::class,
             EvaluationDimensionSeeder::class,
+            EvaluationModelSeeder::class,
             QuestionnairesSeeder::class,
             QuestionsSeeder::class,
             ProcessesAndActivitiesSeeder::class,

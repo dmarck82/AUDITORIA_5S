@@ -16,7 +16,7 @@ docs/tasks/templates
 Estado confirmado:
 
 - existe exatamente uma tarefa em `docs/tasks/active`;
-- tarefas 00, 01, 02 e 03 estão em `docs/tasks/completed`;
+- tarefas 00, 01, 02, 03 e 04 estão em `docs/tasks/completed`;
 - tarefas funcionais seguintes estão em `docs/tasks/pending`;
 - `docs/tasks/templates/00-encerrar-tarefa.md` permanece como procedimento permanente.
 
@@ -107,14 +107,33 @@ Fatos confirmados:
 - o detalhe de metodologia permite criar, editar, excluir e reordenar dimensões;
 - modelos de avaliação, critérios e supervisões permanecem fora do escopo.
 
+
+## Fase 4 — Modelos de avaliação
+
+Status: concluída.
+
+Escopo implementado:
+
+```text
+Modelo de avaliação
+```
+
+Fatos confirmados:
+
+- `evaluation_models` possui `code`, `name`, `description`, `active`, timestamps e `updated_by`;
+- `code` é obrigatório, normalizado para maiúsculas e único;
+- há Model, Factory, Form Requests, Resources, controller, rotas e permissões para modelos de avaliação;
+- o frontend possui listagem, criação, edição e visualização de modelos de avaliação;
+- opções dos modelos, critérios e execução permanecem fora do escopo.
+
 ## Validações conhecidas
 
-Validações executadas na tarefa 03:
+Validações executadas na tarefa 04:
 
 - sintaxe PHP dos arquivos alterados;
 - Pint nos arquivos PHP alterados;
 - `php artisan migrate --pretend`;
-- `php artisan route:list --path=evaluation-dimensions`;
+- `php artisan route:list --path=evaluation-models`;
 - `npm run lint`;
 - `npm run build`.
 
@@ -124,17 +143,17 @@ Limitação de ambiente:
 
 ## Tarefa ativa
 
-Cadastro administrativo de modelos de avaliação.
+Cadastro administrativo de opções dos modelos.
 
 Arquivo:
 
 ```text
-docs/tasks/active/04-modelos-avaliacao.md
+docs/tasks/active/05-opcoes-modelos.md
 ```
 
 ## Próxima fase funcional
 
-Iniciar o cadastro de modelos de avaliação reutilizáveis, sem implementar opções dos modelos, critérios ou execução.
+Iniciar o cadastro de opções ou condições de atendimento vinculadas aos modelos de avaliação, sem implementar critérios ou execução.
 
 ## Observação
 

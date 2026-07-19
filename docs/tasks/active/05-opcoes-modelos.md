@@ -2,7 +2,7 @@
 
 ## Status
 
-PENDENTE.
+ATIVA.
 
 ## Objetivo
 

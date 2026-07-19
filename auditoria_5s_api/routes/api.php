@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\AssessmentController;
 use App\Http\Controllers\Api\EvaluationDimensionController;
+use App\Http\Controllers\Api\EvaluationModelController;
 use App\Http\Controllers\Api\MethodologyController;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\PersonController;
@@ -80,6 +81,12 @@ Route::middleware('auth:api')->group(function () {
     Route::get('evaluation-dimensions/{evaluationDimension}', [EvaluationDimensionController::class, 'show'])->middleware('permission:evaluation_dimensions.view');
     Route::match(['put', 'patch'], 'evaluation-dimensions/{evaluationDimension}', [EvaluationDimensionController::class, 'update'])->middleware('permission:evaluation_dimensions.update');
     Route::delete('evaluation-dimensions/{evaluationDimension}', [EvaluationDimensionController::class, 'destroy'])->middleware('permission:evaluation_dimensions.delete');
+
+    Route::get('evaluation-models', [EvaluationModelController::class, 'index'])->middleware('permission:evaluation_models.view');
+    Route::post('evaluation-models', [EvaluationModelController::class, 'store'])->middleware('permission:evaluation_models.create');
+    Route::get('evaluation-models/{evaluationModel}', [EvaluationModelController::class, 'show'])->middleware('permission:evaluation_models.view');
+    Route::match(['put', 'patch'], 'evaluation-models/{evaluationModel}', [EvaluationModelController::class, 'update'])->middleware('permission:evaluation_models.update');
+    Route::delete('evaluation-models/{evaluationModel}', [EvaluationModelController::class, 'destroy'])->middleware('permission:evaluation_models.delete');
 
     Route::get('people', [PersonController::class, 'index'])->middleware('permission:people.view');
     Route::post('people', [PersonController::class, 'store'])->middleware('permission:people.create');
