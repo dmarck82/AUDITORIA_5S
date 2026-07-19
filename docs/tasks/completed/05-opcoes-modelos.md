@@ -2,7 +2,36 @@
 
 ## Status
 
-ATIVA.
+CONCLUÍDA.
+
+Data de conclusão: 2026-07-19.
+
+## Resultado
+
+- CRUD administrativo de opções dos modelos implementado no backend e frontend.
+- Opção vinculada obrigatoriamente a modelo de avaliação.
+- Valor obrigatório e único dentro do modelo.
+- Opção possui descrição, ordem e status ativo.
+- Permissões de visualização, criação, edição e exclusão adicionadas.
+- Endpoint e tela de reordenação por modelo implementados.
+- Seeder idempotente criado para opções do `M02`.
+- Regra definitiva de conformidade, critérios e execução não foram implementados.
+
+## Validações executadas
+
+- `php -l` nos arquivos PHP alterados e criados.
+- `php vendor/bin/pint` nos arquivos PHP alterados e criados.
+- `php artisan migrate --pretend`.
+- `php artisan route:list --path=evaluation-model-options`.
+- `php artisan test` executado, mas bloqueado por ausência de `pdo_sqlite` no ambiente.
+- `npm run lint` executado com sucesso, mantendo dois avisos preexistentes em `src/pages/assessments/AssessmentsList.jsx`.
+- `npm run build` executado com sucesso, com aviso de chunk acima de 500 kB.
+
+## Pendências residuais
+
+- Habilitar `pdo_sqlite` no PHP do ambiente para executar a suíte backend completa.
+- Definir futuramente regras de conformidade e geração de desvios em tarefa específica.
+
 
 ## Objetivo
 

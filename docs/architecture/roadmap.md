@@ -10,8 +10,8 @@
 | 02 | Metodologias | Concluída |
 | 03 | Dimensões de avaliação | Concluída |
 | 04 | Modelos de avaliação | Concluída |
-| 05 | Opções dos modelos | Ativa |
-| 06 | Critérios universais | Pendente |
+| 05 | Opções dos modelos | Concluída |
+| 06 | Critérios universais | Ativa |
 | 07 | Associação atividade-critério | Pendente |
 | 08 | Aspectos de verificação | Pendente |
 | 09 | Pré-visualização do formulário | Pendente |

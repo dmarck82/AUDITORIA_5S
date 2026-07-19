@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\AssessmentController;
 use App\Http\Controllers\Api\EvaluationDimensionController;
 use App\Http\Controllers\Api\EvaluationModelController;
+use App\Http\Controllers\Api\EvaluationModelOptionController;
 use App\Http\Controllers\Api\MethodologyController;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\PersonController;
@@ -87,6 +88,13 @@ Route::middleware('auth:api')->group(function () {
     Route::get('evaluation-models/{evaluationModel}', [EvaluationModelController::class, 'show'])->middleware('permission:evaluation_models.view');
     Route::match(['put', 'patch'], 'evaluation-models/{evaluationModel}', [EvaluationModelController::class, 'update'])->middleware('permission:evaluation_models.update');
     Route::delete('evaluation-models/{evaluationModel}', [EvaluationModelController::class, 'destroy'])->middleware('permission:evaluation_models.delete');
+
+    Route::get('evaluation-model-options', [EvaluationModelOptionController::class, 'index'])->middleware('permission:evaluation_model_options.view');
+    Route::post('evaluation-model-options', [EvaluationModelOptionController::class, 'store'])->middleware('permission:evaluation_model_options.create');
+    Route::post('evaluation-model-options/reorder', [EvaluationModelOptionController::class, 'reorder'])->middleware('permission:evaluation_model_options.update');
+    Route::get('evaluation-model-options/{evaluationModelOption}', [EvaluationModelOptionController::class, 'show'])->middleware('permission:evaluation_model_options.view');
+    Route::match(['put', 'patch'], 'evaluation-model-options/{evaluationModelOption}', [EvaluationModelOptionController::class, 'update'])->middleware('permission:evaluation_model_options.update');
+    Route::delete('evaluation-model-options/{evaluationModelOption}', [EvaluationModelOptionController::class, 'destroy'])->middleware('permission:evaluation_model_options.delete');
 
     Route::get('people', [PersonController::class, 'index'])->middleware('permission:people.view');
     Route::post('people', [PersonController::class, 'store'])->middleware('permission:people.create');

@@ -13,6 +13,9 @@ import EvaluationDimensionsView from '../pages/evaluationDimensions/EvaluationDi
 import EvaluationModelsForm from '../pages/evaluationModels/EvaluationModelsForm'
 import EvaluationModelsList from '../pages/evaluationModels/EvaluationModelsList'
 import EvaluationModelsView from '../pages/evaluationModels/EvaluationModelsView'
+import EvaluationModelOptionsForm from '../pages/evaluationModelOptions/EvaluationModelOptionsForm'
+import EvaluationModelOptionsList from '../pages/evaluationModelOptions/EvaluationModelOptionsList'
+import EvaluationModelOptionsView from '../pages/evaluationModelOptions/EvaluationModelOptionsView'
 import MethodologiesForm from '../pages/methodologies/MethodologiesForm'
 import MethodologiesList from '../pages/methodologies/MethodologiesList'
 import MethodologiesView from '../pages/methodologies/MethodologiesView'
@@ -157,6 +160,19 @@ function AppRoutes() {
           </Route>
           <Route element={<PermissionRoute permission="evaluation_models.update" />}>
             <Route path="evaluation-models/:id/edit" element={<EvaluationModelsForm />} />
+          </Route>
+
+
+          <Route element={<PermissionRoute permission="evaluation_model_options.view" />}>
+            <Route path="evaluation-model-options" element={<EvaluationModelOptionsList />} />
+            <Route path="evaluation-model-options/:id" element={<EvaluationModelOptionsView />} />
+          </Route>
+          <Route element={<PermissionRoute permission="evaluation_model_options.create" />}>
+            <Route path="evaluation-model-options/create" element={<EvaluationModelOptionsForm />} />
+            <Route path="evaluation-models/:modelId/options/create" element={<EvaluationModelOptionsForm />} />
+          </Route>
+          <Route element={<PermissionRoute permission="evaluation_model_options.update" />}>
+            <Route path="evaluation-model-options/:id/edit" element={<EvaluationModelOptionsForm />} />
           </Route>
 
           <Route element={<PermissionRoute permission="questionnaires.view" />}>

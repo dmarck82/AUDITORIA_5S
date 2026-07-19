@@ -22,6 +22,7 @@ const menuItems = [
       { label: 'Metodologias', path: '/methodologies', permission: 'methodologies.view' },
       { label: 'Dimensões', path: '/evaluation-dimensions', permission: 'evaluation_dimensions.view' },
       { label: 'Modelos de Avaliação', path: '/evaluation-models', permission: 'evaluation_models.view' },
+      { label: 'Opções dos Modelos', path: '/evaluation-model-options', permission: 'evaluation_model_options.view' },
       { label: 'Questionários', path: '/questionnaires', permission: 'questionnaires.view' },
       { label: 'Perguntas', path: '/questions', permission: 'questions.view' },
     ],

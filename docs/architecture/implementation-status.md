@@ -16,7 +16,7 @@ docs/tasks/templates
 Estado confirmado:
 
 - existe exatamente uma tarefa em `docs/tasks/active`;
-- tarefas 00, 01, 02, 03 e 04 estão em `docs/tasks/completed`;
+- tarefas 00, 01, 02, 03, 04 e 05 estão em `docs/tasks/completed`;
 - tarefas funcionais seguintes estão em `docs/tasks/pending`;
 - `docs/tasks/templates/00-encerrar-tarefa.md` permanece como procedimento permanente.
 
@@ -126,14 +126,40 @@ Fatos confirmados:
 - o frontend possui listagem, criação, edição e visualização de modelos de avaliação;
 - opções dos modelos, critérios e execução permanecem fora do escopo.
 
+
+## Fase 5 — Opções dos modelos
+
+Status: concluída.
+
+Escopo implementado:
+
+```text
+Modelo de avaliação
+└── Opção do modelo
+```
+
+Fatos confirmados:
+
+- `evaluation_model_options` pertence a `evaluation_models` por `evaluation_model_id`;
+- opções possuem `value`, `description`, `sort_order`, `active`, timestamps e `updated_by`;
+- `value` é obrigatório e único dentro do modelo de avaliação;
+- há Model, Factory, Form Requests, Resources, controller, rotas e permissões para opções dos modelos;
+- há endpoint de reordenação por modelo de avaliação;
+- `EvaluationModel` possui relacionamento `evaluationModelOptions`;
+- a exclusão de modelo com opções retorna conflito;
+- há seeder idempotente das opções do `M02`;
+- o frontend possui listagem, criação, edição e visualização de opções;
+- o detalhe do modelo de avaliação permite criar, editar, excluir e reordenar opções;
+- regra definitiva de conformidade, critérios e execução permanecem fora do escopo.
+
 ## Validações conhecidas
 
-Validações executadas na tarefa 04:
+Validações executadas na tarefa 05:
 
 - sintaxe PHP dos arquivos alterados;
 - Pint nos arquivos PHP alterados;
 - `php artisan migrate --pretend`;
-- `php artisan route:list --path=evaluation-models`;
+- `php artisan route:list --path=evaluation-model-options`;
 - `npm run lint`;
 - `npm run build`.
 
@@ -143,17 +169,17 @@ Limitação de ambiente:
 
 ## Tarefa ativa
 
-Cadastro administrativo de opções dos modelos.
+Cadastro administrativo de critérios universais.
 
 Arquivo:
 
 ```text
-docs/tasks/active/05-opcoes-modelos.md
+docs/tasks/active/06-criterios-universais.md
 ```
 
 ## Próxima fase funcional
 
-Iniciar o cadastro de opções ou condições de atendimento vinculadas aos modelos de avaliação, sem implementar critérios ou execução.
+Iniciar o cadastro de critérios universais vinculados a dimensão e modelo, sem implementar associação com atividades, aspectos ou supervisões.
 
 ## Observação
 

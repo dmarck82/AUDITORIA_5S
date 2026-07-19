@@ -10,6 +10,7 @@ const HOME_ROUTES = [
   { permission: 'methodologies.view', path: '/methodologies' },
   { permission: 'evaluation_dimensions.view', path: '/evaluation-dimensions' },
   { permission: 'evaluation_models.view', path: '/evaluation-models' },
+  { permission: 'evaluation_model_options.view', path: '/evaluation-model-options' },
   { permission: 'users.view', path: '/users' },
 ]
 

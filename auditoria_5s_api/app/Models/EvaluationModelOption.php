@@ -5,29 +5,32 @@ namespace App\Models;
 use App\Models\Concerns\TracksUpdatedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class EvaluationModel extends Model
+class EvaluationModelOption extends Model
 {
     use HasFactory, TracksUpdatedBy;
 
     protected $fillable = [
-        'code',
-        'name',
+        'evaluation_model_id',
+        'value',
         'description',
+        'sort_order',
         'active',
     ];
 
     protected function casts(): array
     {
         return [
+            'evaluation_model_id' => 'integer',
+            'sort_order' => 'integer',
             'active' => 'boolean',
             'updated_by' => 'integer',
         ];
     }
 
-    public function evaluationModelOptions(): HasMany
+    public function evaluationModel(): BelongsTo
     {
-        return $this->hasMany(EvaluationModelOption::class);
+        return $this->belongsTo(EvaluationModel::class);
     }
 }
