@@ -34,6 +34,26 @@ class MethodologyTest extends TestCase
         ]);
     }
 
+    public function test_methodology_code_is_generated_when_missing(): void
+    {
+        $response = $this
+            ->actingAs($this->adminUser(), 'api')
+            ->postJson('/api/methodologies', [
+                'name' => 'Gestão de Segurança',
+                'description' => 'Metodologia de segurança.',
+                'active' => true,
+            ]);
+
+        $response
+            ->assertCreated()
+            ->assertJsonPath('data.code', 'MET-001');
+
+        $this->assertDatabaseHas('methodologies', [
+            'code' => 'MET-001',
+            'name' => 'Gestão de Segurança',
+        ]);
+    }
+
     public function test_methodology_requires_unique_code_and_name_field(): void
     {
         Methodology::factory()->create(['code' => '5S']);

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\AccessLevel;
+use App\Models\Criterion;
 use App\Models\EvaluationDimension;
 use App\Models\Methodology;
 use App\Models\User;
@@ -38,6 +39,31 @@ class EvaluationDimensionTest extends TestCase
             'code' => 'ORG',
             'name' => 'Organização',
             'sort_order' => 1,
+        ]);
+    }
+
+    public function test_evaluation_dimension_code_is_generated_when_missing(): void
+    {
+        $methodology = Methodology::factory()->create();
+
+        $response = $this
+            ->actingAs($this->adminUser(), 'api')
+            ->postJson('/api/evaluation-dimensions', [
+                'methodology_id' => $methodology->id,
+                'name' => 'Organização',
+                'objective' => 'Avaliar organização.',
+                'sort_order' => 1,
+                'active' => true,
+            ]);
+
+        $response
+            ->assertCreated()
+            ->assertJsonPath('data.code', 'DIM-001');
+
+        $this->assertDatabaseHas('evaluation_dimensions', [
+            'methodology_id' => $methodology->id,
+            'code' => 'DIM-001',
+            'name' => 'Organização',
         ]);
     }
 
@@ -144,6 +170,19 @@ class EvaluationDimensionTest extends TestCase
 
         $response->assertNoContent();
         $this->assertDatabaseMissing('evaluation_dimensions', ['id' => $dimension->id]);
+    }
+
+    public function test_dimension_with_criteria_cannot_be_deleted(): void
+    {
+        $dimension = EvaluationDimension::factory()->create();
+        Criterion::factory()->create(['evaluation_dimension_id' => $dimension->id]);
+
+        $response = $this
+            ->actingAs($this->adminUser(), 'api')
+            ->deleteJson("/api/evaluation-dimensions/{$dimension->id}");
+
+        $response->assertConflict();
+        $this->assertDatabaseHas('evaluation_dimensions', ['id' => $dimension->id]);
     }
 
     private function adminUser(): User

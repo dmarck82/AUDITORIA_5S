@@ -5,6 +5,7 @@ import AlertMessage from '../../components/AlertMessage'
 import Loading from '../../components/Loading'
 import { FormActions, FormSection, PageHeader } from '../../components/ui'
 import { fetchAllPages } from '../../utils/apiData'
+import { nextAvailableSortOrder } from '../../utils/sortOrder'
 import { getQuestionCategoryLabel } from './questionCategories'
 
 const emptyForm = {
@@ -24,6 +25,7 @@ function QuestionsForm() {
   const [form, setForm] = useState({ ...emptyForm, questionnaire_id: searchParams.get('questionnaire_id') || '' })
   const [questionnaires, setQuestionnaires] = useState([])
   const [categories, setCategories] = useState([])
+  const [questions, setQuestions] = useState([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [alert, setAlert] = useState(null)
@@ -31,25 +33,32 @@ function QuestionsForm() {
   useEffect(() => {
     const loadFormData = async () => {
       try {
-        const [loadedQuestionnaires, categoriesResponse] = await Promise.all([
+        const [loadedQuestionnaires, loadedQuestions, categoriesResponse] = await Promise.all([
           fetchAllPages('/questionnaires'),
+          fetchAllPages('/questions'),
           api.get('/questions/categories'),
         ])
 
         setQuestionnaires(loadedQuestionnaires)
+        setQuestions(loadedQuestions)
         setCategories(categoriesResponse.data.data || categoriesResponse.data)
 
         if (isEditing) {
           const questionResponse = await api.get(`/questions/${id}`)
           const question = questionResponse.data.data || questionResponse.data
           setForm({
-            questionnaire_id: question.questionnaire_id || '',
+            questionnaire_id: String(question.questionnaire_id || ''),
             category: question.category || '',
             question: question.question || '',
             description: question.description || '',
             sort_order: question.sort_order || 1,
             active: Boolean(question.active),
           })
+        } else if (searchParams.get('questionnaire_id')) {
+          const questionnaireId = searchParams.get('questionnaire_id')
+          const nextOrder = nextAvailableSortOrder(loadedQuestions.filter((question) => String(question.questionnaire_id) === String(questionnaireId)))
+
+          setForm((currentForm) => ({ ...currentForm, questionnaire_id: questionnaireId, sort_order: nextOrder }))
         }
       } catch {
         setAlert({ type: 'danger', message: 'Não foi possível carregar os dados da pergunta.' })
@@ -59,11 +68,21 @@ function QuestionsForm() {
     }
 
     loadFormData()
-  }, [id, isEditing])
+  }, [id, isEditing, searchParams])
 
   const updateField = (event) => {
     const { name, value, type, checked } = event.target
-    setForm((currentForm) => ({ ...currentForm, [name]: type === 'checkbox' ? checked : value }))
+    setForm((currentForm) => {
+      const nextForm = { ...currentForm, [name]: type === 'checkbox' ? checked : value }
+
+      if (!isEditing && name === 'questionnaire_id') {
+        nextForm.sort_order = value
+          ? nextAvailableSortOrder(questions.filter((question) => String(question.questionnaire_id) === String(value)))
+          : 1
+      }
+
+      return nextForm
+    })
   }
 
   const submitForm = async (event) => {

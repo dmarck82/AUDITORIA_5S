@@ -4,6 +4,7 @@ import api from '../../api/axios'
 import AlertMessage from '../../components/AlertMessage'
 import Loading from '../../components/Loading'
 import { FormActions, FormSection, PageHeader } from '../../components/ui'
+import { nextAvailableSortOrder } from '../../utils/sortOrder'
 
 const emptyForm = { process_id: '', name: '', description: '', sort_order: 1, active: true }
 
@@ -36,7 +37,7 @@ function ActivitiesForm() {
         } else {
           const processResponse = await api.get(`/processes/${processId}`)
           const loadedProcess = processResponse.data.data || processResponse.data
-          const nextOrder = (loadedProcess.activities || []).length + 1
+          const nextOrder = nextAvailableSortOrder(loadedProcess.activities || [])
 
           setProcess(loadedProcess)
           setForm({ ...emptyForm, process_id: loadedProcess.id, sort_order: nextOrder })

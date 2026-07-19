@@ -5,6 +5,7 @@ import AlertMessage from '../../components/AlertMessage'
 import Loading from '../../components/Loading'
 import { FormActions, FormSection, PageHeader } from '../../components/ui'
 import { fetchAllPages } from '../../utils/apiData'
+import { nextAvailableSortOrder } from '../../utils/sortOrder'
 
 const emptyForm = {
   methodology_id: '',
@@ -21,6 +22,7 @@ function EvaluationDimensionsForm() {
   const isEditing = Boolean(id)
   const [form, setForm] = useState({ ...emptyForm, methodology_id: methodologyId || '' })
   const [methodologies, setMethodologies] = useState([])
+  const [dimensions, setDimensions] = useState([])
   const [cancelTo, setCancelTo] = useState(methodologyId ? '/methodologies/' + methodologyId : '/evaluation-dimensions')
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -29,8 +31,12 @@ function EvaluationDimensionsForm() {
   useEffect(() => {
     const loadFormData = async () => {
       try {
-        const loadedMethodologies = await fetchAllPages('/methodologies')
+        const [loadedMethodologies, loadedDimensions] = await Promise.all([
+          fetchAllPages('/methodologies'),
+          fetchAllPages('/evaluation-dimensions'),
+        ])
         setMethodologies(loadedMethodologies.filter((methodology) => methodology.active))
+        setDimensions(loadedDimensions)
 
         if (isEditing) {
           const response = await api.get(`/evaluation-dimensions/${id}`)
@@ -45,7 +51,9 @@ function EvaluationDimensionsForm() {
           })
           setCancelTo(dimension.methodology_id ? '/methodologies/' + dimension.methodology_id : '/evaluation-dimensions')
         } else if (methodologyId) {
-          setForm((currentForm) => ({ ...currentForm, methodology_id: String(methodologyId) }))
+          const nextOrder = nextAvailableSortOrder(loadedDimensions.filter((dimension) => String(dimension.methodology_id) === String(methodologyId)))
+
+          setForm((currentForm) => ({ ...currentForm, methodology_id: String(methodologyId), sort_order: nextOrder }))
           setCancelTo('/methodologies/' + methodologyId)
         }
       } catch {
@@ -60,7 +68,17 @@ function EvaluationDimensionsForm() {
 
   const updateField = (event) => {
     const { name, value, type, checked } = event.target
-    setForm((currentForm) => ({ ...currentForm, [name]: type === 'checkbox' ? checked : value }))
+    setForm((currentForm) => {
+      const nextForm = { ...currentForm, [name]: type === 'checkbox' ? checked : value }
+
+      if (!isEditing && name === 'methodology_id') {
+        nextForm.sort_order = value
+          ? nextAvailableSortOrder(dimensions.filter((dimension) => String(dimension.methodology_id) === String(value)))
+          : 1
+      }
+
+      return nextForm
+    })
   }
 
   const submitForm = async (event) => {
@@ -71,9 +89,14 @@ function EvaluationDimensionsForm() {
     const payload = {
       ...form,
       methodology_id: Number(form.methodology_id),
-      code: form.code.trim().toUpperCase(),
       objective: form.objective || null,
       sort_order: Number(form.sort_order),
+    }
+
+    if (isEditing) {
+      payload.code = form.code.trim().toUpperCase()
+    } else {
+      delete payload.code
     }
 
     try {
@@ -110,11 +133,13 @@ function EvaluationDimensionsForm() {
               ))}
             </select>
           </div>
-          <div className="col-md-3">
-            <label className="form-label" htmlFor="code">Código</label>
-            <input className="form-control text-uppercase" id="code" maxLength="80" name="code" value={form.code} onChange={updateField} required />
-          </div>
-          <div className="col-md-3">
+          {isEditing && (
+            <div className="col-md-3">
+              <label className="form-label" htmlFor="code">Código</label>
+              <input className="form-control text-uppercase" id="code" name="code" value={form.code} readOnly />
+            </div>
+          )}
+          <div className={isEditing ? 'col-md-3' : 'col-md-6'}>
             <label className="form-label" htmlFor="sort_order">Ordem</label>
             <input className="form-control" id="sort_order" min="1" name="sort_order" type="number" value={form.sort_order} onChange={updateField} required />
           </div>

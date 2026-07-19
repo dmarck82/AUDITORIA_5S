@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\AccessLevel;
+use App\Models\Criterion;
 use App\Models\EvaluationModel;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -31,6 +32,26 @@ class EvaluationModelTest extends TestCase
         $this->assertDatabaseHas('evaluation_models', [
             'code' => 'M01',
             'name' => 'Graduação específica',
+        ]);
+    }
+
+    public function test_evaluation_model_code_is_generated_when_missing(): void
+    {
+        $response = $this
+            ->actingAs($this->adminUser(), 'api')
+            ->postJson('/api/evaluation-models', [
+                'name' => 'Modelo automático',
+                'description' => 'Modelo criado sem informar código.',
+                'active' => true,
+            ]);
+
+        $response
+            ->assertCreated()
+            ->assertJsonPath('data.code', 'MOD-001');
+
+        $this->assertDatabaseHas('evaluation_models', [
+            'code' => 'MOD-001',
+            'name' => 'Modelo automático',
         ]);
     }
 
@@ -89,6 +110,19 @@ class EvaluationModelTest extends TestCase
 
         $response->assertNoContent();
         $this->assertDatabaseMissing('evaluation_models', ['id' => $model->id]);
+    }
+
+    public function test_model_with_criteria_cannot_be_deleted(): void
+    {
+        $model = EvaluationModel::factory()->create();
+        Criterion::factory()->create(['evaluation_model_id' => $model->id]);
+
+        $response = $this
+            ->actingAs($this->adminUser(), 'api')
+            ->deleteJson("/api/evaluation-models/{$model->id}");
+
+        $response->assertConflict();
+        $this->assertDatabaseHas('evaluation_models', ['id' => $model->id]);
     }
 
     private function adminUser(): User

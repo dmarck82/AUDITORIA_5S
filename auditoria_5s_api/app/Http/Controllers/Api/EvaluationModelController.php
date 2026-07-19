@@ -8,6 +8,7 @@ use App\Http\Requests\EvaluationModels\UpdateEvaluationModelRequest;
 use App\Http\Resources\EvaluationModelListResource;
 use App\Http\Resources\EvaluationModelResource;
 use App\Models\EvaluationModel;
+use App\Support\CodeGenerator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
@@ -27,7 +28,10 @@ class EvaluationModelController extends Controller
 
     public function store(StoreEvaluationModelRequest $request): EvaluationModelResource
     {
-        $model = EvaluationModel::create($request->validated());
+        $data = $request->validated();
+        $data['code'] = ($data['code'] ?? null) ?: CodeGenerator::next('evaluation_models', 'MOD');
+
+        $model = EvaluationModel::create($data);
 
         return new EvaluationModelResource($model->load('updatedBy.person')->loadCount('evaluationModelOptions'));
     }
@@ -49,6 +53,12 @@ class EvaluationModelController extends Controller
         if ($evaluationModel->evaluationModelOptions()->exists()) {
             return response()->json([
                 'message' => 'This evaluation model cannot be deleted because it has options linked to it.',
+            ], 409);
+        }
+
+        if ($evaluationModel->criteria()->exists()) {
+            return response()->json([
+                'message' => 'This evaluation model cannot be deleted because it has criteria linked to it.',
             ], 409);
         }
 

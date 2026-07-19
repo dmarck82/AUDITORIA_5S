@@ -29,7 +29,7 @@ class StoreEvaluationDimensionRequest extends FormRequest
         return [
             'methodology_id' => ['required', 'integer', 'exists:methodologies,id'],
             'code' => [
-                'required',
+                'nullable',
                 'string',
                 'max:80',
                 Rule::unique('evaluation_dimensions', 'code')->where(fn ($query) => $query->where('methodology_id', $this->integer('methodology_id'))),

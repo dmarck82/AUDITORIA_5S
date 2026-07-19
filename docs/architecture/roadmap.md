@@ -11,8 +11,8 @@
 | 03 | Dimensões de avaliação | Concluída |
 | 04 | Modelos de avaliação | Concluída |
 | 05 | Opções dos modelos | Concluída |
-| 06 | Critérios universais | Ativa |
-| 07 | Associação atividade-critério | Pendente |
+| 06 | Critérios universais | Concluída |
+| 07 | Associação atividade-critério | Ativa |
 | 08 | Aspectos de verificação | Pendente |
 | 09 | Pré-visualização do formulário | Pendente |
 | 10 | Supervisões | Pendente |
@@ -35,7 +35,7 @@ A conclusão de uma tarefa deve usar `docs/tasks/templates/00-encerrar-tarefa.md
 
 ### Marco A — Biblioteca metodológica
 
-Concluído após as tarefas 02 a 06.
+Concluído.
 
 ### Marco B — Parametrização por atividade
 

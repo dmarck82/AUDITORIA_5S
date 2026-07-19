@@ -5,6 +5,7 @@ import AlertMessage from '../../components/AlertMessage'
 import Loading from '../../components/Loading'
 import { FormActions, FormSection, PageHeader } from '../../components/ui'
 import { fetchAllPages } from '../../utils/apiData'
+import { nextAvailableSortOrder } from '../../utils/sortOrder'
 
 const emptyForm = {
   evaluation_model_id: '',
@@ -20,6 +21,7 @@ function EvaluationModelOptionsForm() {
   const isEditing = Boolean(id)
   const [form, setForm] = useState({ ...emptyForm, evaluation_model_id: modelId || '' })
   const [models, setModels] = useState([])
+  const [options, setOptions] = useState([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [alert, setAlert] = useState(null)
@@ -27,8 +29,12 @@ function EvaluationModelOptionsForm() {
   useEffect(() => {
     const loadFormData = async () => {
       try {
-        const loadedModels = await fetchAllPages('/evaluation-models')
+        const [loadedModels, loadedOptions] = await Promise.all([
+          fetchAllPages('/evaluation-models'),
+          fetchAllPages('/evaluation-model-options'),
+        ])
         setModels(loadedModels.filter((model) => model.active))
+        setOptions(loadedOptions)
 
         if (isEditing) {
           const response = await api.get(`/evaluation-model-options/${id}`)
@@ -41,7 +47,9 @@ function EvaluationModelOptionsForm() {
             active: Boolean(option.active),
           })
         } else if (modelId) {
-          setForm((currentForm) => ({ ...currentForm, evaluation_model_id: String(modelId) }))
+          const nextOrder = nextAvailableSortOrder(loadedOptions.filter((option) => String(option.evaluation_model_id) === String(modelId)))
+
+          setForm((currentForm) => ({ ...currentForm, evaluation_model_id: String(modelId), sort_order: nextOrder }))
         }
       } catch {
         setAlert({ type: 'danger', message: 'Não foi possível carregar os dados da opção.' })
@@ -55,7 +63,17 @@ function EvaluationModelOptionsForm() {
 
   const updateField = (event) => {
     const { name, value, type, checked } = event.target
-    setForm((currentForm) => ({ ...currentForm, [name]: type === 'checkbox' ? checked : value }))
+    setForm((currentForm) => {
+      const nextForm = { ...currentForm, [name]: type === 'checkbox' ? checked : value }
+
+      if (!isEditing && name === 'evaluation_model_id') {
+        nextForm.sort_order = value
+          ? nextAvailableSortOrder(options.filter((option) => String(option.evaluation_model_id) === String(value)))
+          : 1
+      }
+
+      return nextForm
+    })
   }
 
   const submitForm = async (event) => {

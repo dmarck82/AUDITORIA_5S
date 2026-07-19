@@ -152,14 +152,41 @@ Fatos confirmados:
 - o detalhe do modelo de avaliação permite criar, editar, excluir e reordenar opções;
 - regra definitiva de conformidade, critérios e execução permanecem fora do escopo.
 
+## Fase 6 — Critérios universais
+
+Status: concluída.
+
+Escopo implementado:
+
+```text
+Dimensão de avaliação
+└── Critério universal
+    └── Modelo de avaliação
+```
+
+Fatos confirmados:
+
+- `criteria` pertence a `evaluation_dimensions` por `evaluation_dimension_id`;
+- `criteria` pertence a `evaluation_models` por `evaluation_model_id`;
+- critérios possuem `code`, `text`, `description`, `active`, timestamps e `updated_by`;
+- `code` é obrigatório, normalizado para maiúsculas e único globalmente;
+- há Model, Factory, Form Requests, Resources, controller, rotas e permissões para critérios;
+- há seeder idempotente de critérios universais;
+- a API permite filtrar critérios por dimensão e por modelo;
+- `EvaluationDimension` e `EvaluationModel` possuem relacionamento `criteria`;
+- a exclusão de dimensão ou modelo com critérios retorna conflito;
+- o frontend possui listagem, criação, edição e visualização de critérios;
+- a navegação administrativa inclui Critérios Universais no menu Modelos;
+- associação com atividades, aspectos e supervisões permanecem fora do escopo.
+
 ## Validações conhecidas
 
-Validações executadas na tarefa 05:
+Validações executadas na tarefa 06:
 
 - sintaxe PHP dos arquivos alterados;
 - Pint nos arquivos PHP alterados;
 - `php artisan migrate --pretend`;
-- `php artisan route:list --path=evaluation-model-options`;
+- `php artisan route:list --path=criteria`;
 - `npm run lint`;
 - `npm run build`.
 
@@ -169,17 +196,17 @@ Limitação de ambiente:
 
 ## Tarefa ativa
 
-Cadastro administrativo de critérios universais.
+Associação entre atividades e critérios universais.
 
 Arquivo:
 
 ```text
-docs/tasks/active/06-criterios-universais.md
+docs/tasks/active/07-associacao-atividade-criterio.md
 ```
 
 ## Próxima fase funcional
 
-Iniciar o cadastro de critérios universais vinculados a dimensão e modelo, sem implementar associação com atividades, aspectos ou supervisões.
+Permitir vincular critérios universais às atividades, sem implementar aspectos, respostas ou cálculo.
 
 ## Observação
 

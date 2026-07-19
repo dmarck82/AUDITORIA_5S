@@ -30,4 +30,9 @@ class EvaluationModel extends Model
     {
         return $this->hasMany(EvaluationModelOption::class);
     }
+
+    public function criteria(): HasMany
+    {
+        return $this->hasMany(Criterion::class);
+    }
 }

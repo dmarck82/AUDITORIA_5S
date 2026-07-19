@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Methodology;
+use App\Support\CodeGenerator;
 use Illuminate\Database\Seeder;
 
 class MethodologySeeder extends Seeder
@@ -11,26 +12,23 @@ class MethodologySeeder extends Seeder
     {
         $methodologies = [
             [
-                'code' => '5S',
                 'name' => '5S',
-                'description' => 'Metodologia para supervisão de organização, ordenação, limpeza, padronização e disciplina.',
+                'description' => 'Metodologia para supervisão de organização, ordenação, limpeza, padronização e disciplina no ambiente de trabalho.',
             ],
             [
-                'code' => 'GA',
                 'name' => 'Gestão Ambiental',
-                'description' => 'Metodologia para supervisão de condições ambientais de trabalho.',
+                'description' => 'Metodologia para supervisão de condições ambientais no ambiente de trabalho.',
             ],
         ];
 
-        foreach ($methodologies as $methodology) {
-            Methodology::query()->updateOrCreate(
-                ['code' => $methodology['code']],
-                [
-                    'name' => $methodology['name'],
-                    'description' => $methodology['description'],
-                    'active' => true,
-                ]
-            );
+        foreach ($methodologies as $methodologyData) {
+            $methodology = Methodology::query()->firstOrNew(['name' => $methodologyData['name']]);
+            $methodology->fill([
+                'code' => $methodology->code ?: CodeGenerator::next('methodologies', 'MET'),
+                'description' => $methodologyData['description'],
+                'active' => true,
+            ]);
+            $methodology->save();
         }
     }
 }

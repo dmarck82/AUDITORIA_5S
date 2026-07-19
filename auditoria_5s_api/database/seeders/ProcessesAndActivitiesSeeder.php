@@ -11,84 +11,51 @@ class ProcessesAndActivitiesSeeder extends Seeder
 {
     public function run(): void
     {
-        $data = [
-            'Almoxarifado de Treinamento' => [
-                'Gestão do Almoxarifado' => [
-                    'Recebimento',
-                    'Armazenamento',
-                    'Conservação',
-                    'Distribuição',
-                ],
+        $sector = Sector::query()->where('name', 'Almoxarifado')->first();
+
+        if (! $sector) {
+            return;
+        }
+
+        $processes = [
+            'Gestão do Almoxarifado' => [
+                'Recebimento de materiais',
+                'Armazenamento em prateleiras',
+                'Conservação dos materiais',
+                'Distribuição para solicitantes',
             ],
-            'Estoque' => [
-                'Gestão de Estoque' => [
-                    'Recebimento de produtos',
-                    'Endereçamento',
-                    'Separação',
-                    'Inventário',
-                ],
-            ],
-            'Expedição' => [
-                'Expedição de Materiais' => [
-                    'Conferência',
-                    'Embalagem',
-                    'Carregamento',
-                    'Registro de saída',
-                ],
-            ],
-            'Produção' => [
-                'Operação da Linha Produtiva' => [
-                    'Preparação do posto',
-                    'Execução da operação',
-                    'Inspeção visual',
-                    'Liberação da área',
-                ],
-            ],
-            'Qualidade' => [
-                'Controle da Qualidade' => [
-                    'Coleta de amostras',
-                    'Inspeção',
-                    'Registro de desvios',
-                    'Liberação do lote',
-                ],
+            'Controle de Estoque do Almoxarifado' => [
+                'Registro de entrada',
+                'Endereçamento físico',
+                'Inventário periódico',
+                'Separação de materiais',
             ],
         ];
 
-        foreach ($data as $sectorName => $processes) {
-            $sector = Sector::query()
-                ->where('name', $sectorName)
-                ->orderBy('id')
-                ->first();
+        foreach ($processes as $processName => $activities) {
+            $process = WorkProcess::query()->updateOrCreate(
+                [
+                    'sector_id' => $sector->id,
+                    'name' => $processName,
+                ],
+                [
+                    'description' => 'Processo operacional usado como referência para os exemplos do Almoxarifado.',
+                    'active' => true,
+                ]
+            );
 
-            if (! $sector) {
-                continue;
-            }
-
-            foreach ($processes as $processName => $activities) {
-                $process = WorkProcess::query()->updateOrCreate(
+            foreach ($activities as $index => $activityName) {
+                Activity::query()->updateOrCreate(
                     [
-                        'sector_id' => $sector->id,
-                        'name' => $processName,
+                        'process_id' => $process->id,
+                        'name' => $activityName,
                     ],
                     [
-                        'description' => "Processo operacional do setor {$sectorName}.",
+                        'description' => null,
+                        'sort_order' => $index + 1,
                         'active' => true,
                     ]
                 );
-
-                foreach ($activities as $index => $activityName) {
-                    Activity::query()->updateOrCreate(
-                        [
-                            'process_id' => $process->id,
-                            'name' => $activityName,
-                        ],
-                        [
-                            'description' => null,
-                            'sort_order' => $index + 1,
-                            'active' => true,
-                        ]
-                    );
-                }
             }
         }
     }

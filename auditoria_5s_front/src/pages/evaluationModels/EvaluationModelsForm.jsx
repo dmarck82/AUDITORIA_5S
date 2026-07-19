@@ -57,9 +57,13 @@ function EvaluationModelsForm() {
     setAlert(null)
 
     const payload = {
-      ...form,
-      code: form.code.trim().toUpperCase(),
+      name: form.name,
       description: form.description || null,
+      active: form.active,
+    }
+
+    if (isEditing) {
+      payload.code = form.code.trim().toUpperCase()
     }
 
     try {
@@ -87,11 +91,13 @@ function EvaluationModelsForm() {
       <AlertMessage type={alert?.type} message={alert?.message} errors={alert?.errors} />
       <FormSection>
         <form className="row g-3" onSubmit={submitForm}>
-          <div className="col-md-4">
-            <label className="form-label" htmlFor="code">Código</label>
-            <input className="form-control text-uppercase" id="code" maxLength="80" name="code" value={form.code} onChange={updateField} required />
-          </div>
-          <div className="col-md-8">
+          {isEditing && (
+            <div className="col-md-4">
+              <label className="form-label" htmlFor="code">Código</label>
+              <input className="form-control text-uppercase" id="code" name="code" value={form.code} readOnly />
+            </div>
+          )}
+          <div className={isEditing ? 'col-md-8' : 'col-12'}>
             <label className="form-label" htmlFor="name">Nome</label>
             <input className="form-control" id="name" name="name" value={form.name} onChange={updateField} required />
           </div>

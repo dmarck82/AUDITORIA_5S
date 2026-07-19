@@ -8,6 +8,7 @@ use App\Http\Requests\Methodologies\UpdateMethodologyRequest;
 use App\Http\Resources\MethodologyListResource;
 use App\Http\Resources\MethodologyResource;
 use App\Models\Methodology;
+use App\Support\CodeGenerator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
@@ -27,7 +28,10 @@ class MethodologyController extends Controller
 
     public function store(StoreMethodologyRequest $request): MethodologyResource
     {
-        $methodology = Methodology::create($request->validated());
+        $data = $request->validated();
+        $data['code'] = ($data['code'] ?? null) ?: CodeGenerator::next('methodologies', 'MET');
+
+        $methodology = Methodology::create($data);
 
         return new MethodologyResource($methodology->load('updatedBy.person')->loadCount('evaluationDimensions'));
     }

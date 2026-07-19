@@ -7,6 +7,9 @@ import AssessmentForm from '../pages/assessments/AssessmentForm'
 import AssessmentsList from '../pages/assessments/AssessmentsList'
 import AssessmentView from '../pages/assessments/AssessmentView'
 import Login from '../pages/auth/Login'
+import CriteriaForm from '../pages/criteria/CriteriaForm'
+import CriteriaList from '../pages/criteria/CriteriaList'
+import CriteriaView from '../pages/criteria/CriteriaView'
 import EvaluationDimensionsForm from '../pages/evaluationDimensions/EvaluationDimensionsForm'
 import EvaluationDimensionsList from '../pages/evaluationDimensions/EvaluationDimensionsList'
 import EvaluationDimensionsView from '../pages/evaluationDimensions/EvaluationDimensionsView'
@@ -173,6 +176,17 @@ function AppRoutes() {
           </Route>
           <Route element={<PermissionRoute permission="evaluation_model_options.update" />}>
             <Route path="evaluation-model-options/:id/edit" element={<EvaluationModelOptionsForm />} />
+          </Route>
+
+          <Route element={<PermissionRoute permission="criteria.view" />}>
+            <Route path="criteria" element={<CriteriaList />} />
+            <Route path="criteria/:id" element={<CriteriaView />} />
+          </Route>
+          <Route element={<PermissionRoute permission="criteria.create" />}>
+            <Route path="criteria/create" element={<CriteriaForm />} />
+          </Route>
+          <Route element={<PermissionRoute permission="criteria.update" />}>
+            <Route path="criteria/:id/edit" element={<CriteriaForm />} />
           </Route>
 
           <Route element={<PermissionRoute permission="questionnaires.view" />}>

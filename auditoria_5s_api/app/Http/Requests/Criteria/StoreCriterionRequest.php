@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Methodologies;
+namespace App\Http\Requests\Criteria;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreMethodologyRequest extends FormRequest
+class StoreCriterionRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -27,8 +27,10 @@ class StoreMethodologyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => ['nullable', 'string', 'max:80', Rule::unique('methodologies', 'code')],
-            'name' => ['required', 'string', 'max:255'],
+            'evaluation_dimension_id' => ['required', 'integer', 'exists:evaluation_dimensions,id'],
+            'evaluation_model_id' => ['required', 'integer', 'exists:evaluation_models,id'],
+            'code' => ['nullable', 'string', 'max:80', Rule::unique('criteria', 'code')],
+            'text' => ['required', 'string', 'max:2000'],
             'description' => ['nullable', 'string', 'max:1000'],
             'active' => ['sometimes', 'boolean'],
         ];

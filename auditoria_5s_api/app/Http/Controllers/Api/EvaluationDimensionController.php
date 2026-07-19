@@ -9,6 +9,7 @@ use App\Http\Requests\EvaluationDimensions\UpdateEvaluationDimensionRequest;
 use App\Http\Resources\EvaluationDimensionListResource;
 use App\Http\Resources\EvaluationDimensionResource;
 use App\Models\EvaluationDimension;
+use App\Support\CodeGenerator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -31,7 +32,14 @@ class EvaluationDimensionController extends Controller
 
     public function store(StoreEvaluationDimensionRequest $request): EvaluationDimensionResource
     {
-        $dimension = EvaluationDimension::create($request->validated());
+        $data = $request->validated();
+        $data['code'] = ($data['code'] ?? null) ?: CodeGenerator::next(
+            'evaluation_dimensions',
+            'DIM',
+            fn ($query) => $query->where('methodology_id', $data['methodology_id'])
+        );
+
+        $dimension = EvaluationDimension::create($data);
 
         return new EvaluationDimensionResource($dimension->load($this->relations()));
     }
@@ -94,8 +102,14 @@ class EvaluationDimensionController extends Controller
         ]);
     }
 
-    public function destroy(EvaluationDimension $evaluationDimension): Response
+    public function destroy(EvaluationDimension $evaluationDimension): Response|JsonResponse
     {
+        if ($evaluationDimension->criteria()->exists()) {
+            return response()->json([
+                'message' => 'This evaluation dimension cannot be deleted because it has criteria linked to it.',
+            ], 409);
+        }
+
         $evaluationDimension->delete();
 
         return response()->noContent();

@@ -7,7 +7,7 @@ import DataTable from '../../components/DataTable'
 import Loading from '../../components/Loading'
 import TableActions from '../../components/TableActions'
 import { Card, PageActions, PageHeader, StatusBadge } from '../../components/ui'
-import { fetchAllPages, getRelatedName } from '../../utils/apiData'
+import { fetchAllPages } from '../../utils/apiData'
 import { getQuestionCategoryLabel } from './questionCategories'
 
 function QuestionsList() {
@@ -17,32 +17,48 @@ function QuestionsList() {
   const selectedQuestionnaireId = searchParams.get('questionnaire_id') || ''
   const [questions, setQuestions] = useState([])
   const [questionnaires, setQuestionnaires] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loadingQuestionnaires, setLoadingQuestionnaires] = useState(true)
+  const [loadingQuestions, setLoadingQuestions] = useState(false)
   const [reorderMode, setReorderMode] = useState(false)
   const [reorderedQuestions, setReorderedQuestions] = useState([])
   const [draggedQuestionId, setDraggedQuestionId] = useState(null)
   const [savingOrder, setSavingOrder] = useState(false)
   const [alert, setAlert] = useState(location.state?.message ? { type: 'success', message: location.state.message } : null)
 
+  useEffect(() => {
+    const loadQuestionnaires = async () => {
+      try {
+        setQuestionnaires(await fetchAllPages('/questionnaires'))
+      } catch {
+        setAlert({ type: 'danger', message: 'Não foi possível carregar os questionários.' })
+      } finally {
+        setLoadingQuestionnaires(false)
+      }
+    }
+
+    loadQuestionnaires()
+  }, [])
+
   const loadQuestions = useCallback(async () => {
-    setLoading(true)
+    if (!selectedQuestionnaireId) {
+      setQuestions([])
+      setReorderedQuestions([])
+      return
+    }
+
+    setLoadingQuestions(true)
     if (!location.state?.message) {
       setAlert(null)
     }
 
     try {
-      const [loadedQuestionnaires, loadedQuestions] = await Promise.all([
-        fetchAllPages('/questionnaires'),
-        fetchAllPages('/questions', selectedQuestionnaireId ? { params: { questionnaire_id: selectedQuestionnaireId } } : {}),
-      ])
-
-      setQuestionnaires(loadedQuestionnaires)
+      const loadedQuestions = await fetchAllPages('/questions', { params: { questionnaire_id: selectedQuestionnaireId } })
       setQuestions(loadedQuestions)
       setReorderedQuestions([...loadedQuestions].sort((first, second) => Number(first.sort_order) - Number(second.sort_order)))
     } catch {
       setAlert({ type: 'danger', message: 'Não foi possível carregar as perguntas.' })
     } finally {
-      setLoading(false)
+      setLoadingQuestions(false)
     }
   }, [location.state?.message, selectedQuestionnaireId])
 
@@ -60,11 +76,7 @@ function QuestionsList() {
     setReorderMode(false)
     setDraggedQuestionId(null)
 
-    if (nextQuestionnaireId) {
-      setSearchParams({ questionnaire_id: nextQuestionnaireId })
-    } else {
-      setSearchParams({})
-    }
+    setSearchParams({ questionnaire_id: nextQuestionnaireId })
   }
 
   const deleteQuestion = async (question) => {
@@ -155,13 +167,6 @@ function QuestionsList() {
       sortValue: (question) => question.sort_order,
     },
     {
-      key: 'questionnaire',
-      label: 'Questionário',
-      render: (question) => getRelatedName(question, 'questionnaire', 'questionnaire_id'),
-      searchValue: (question) => getRelatedName(question, 'questionnaire', 'questionnaire_id'),
-      sortValue: (question) => getRelatedName(question, 'questionnaire', 'questionnaire_id'),
-    },
-    {
       key: 'category',
       label: 'Categoria',
       render: (question) => getQuestionCategoryLabel(question.category),
@@ -203,11 +208,12 @@ function QuestionsList() {
         actions={(
           <PageActions>
           {can('questions.update') && (
-            <button className={`btn ${reorderMode ? 'btn-success' : 'btn-outline-secondary'}`} type="button" disabled={savingOrder || loading} onClick={toggleReorder}>
+            <button className={`btn ${reorderMode ? 'btn-success' : 'btn-outline-secondary'}`} type="button" disabled={savingOrder || loadingQuestions || !selectedQuestionnaireId} onClick={toggleReorder}>
               {savingOrder ? 'Salvando...' : reorderMode ? 'Concluir' : 'Alterar Ordem'}
             </button>
           )}
-          {can('questions.create') && !reorderMode && <Link className="btn btn-primary" to={selectedQuestionnaireId ? `/questions/create?questionnaire_id=${selectedQuestionnaireId}` : '/questions/create'}>Nova Pergunta</Link>}
+          <Link className="btn btn-outline-secondary" to={selectedQuestionnaireId ? `/questionnaires/${selectedQuestionnaireId}` : '/questionnaires'}>Voltar</Link>
+          {can('questions.create') && !reorderMode && selectedQuestionnaireId && <Link className="btn btn-primary" to={`/questions/create?questionnaire_id=${selectedQuestionnaireId}`}>Nova Pergunta</Link>}
           </PageActions>
         )}
       />
@@ -218,8 +224,8 @@ function QuestionsList() {
       <div className="row g-3 align-items-end">
         <div className="col-md-6 col-lg-4">
           <label className="form-label" htmlFor="questionnaire_filter">Questionário</label>
-          <select className="form-select" disabled={reorderMode} id="questionnaire_filter" value={selectedQuestionnaireId} onChange={updateQuestionnaireFilter}>
-            <option value="">Todos</option>
+          <select className="form-select" disabled={reorderMode || loadingQuestionnaires} id="questionnaire_filter" value={selectedQuestionnaireId} onChange={updateQuestionnaireFilter}>
+            <option value="" disabled>Selecione um questionário</option>
             {questionnaires.map((questionnaire) => (
               <option key={questionnaire.id} value={questionnaire.id}>{questionnaire.name}</option>
             ))}
@@ -229,7 +235,13 @@ function QuestionsList() {
       </div>
       </Card>
 
-      {loading ? (
+      {loadingQuestionnaires ? (
+        <Loading message="Carregando questionários..." />
+      ) : !selectedQuestionnaireId ? (
+        <Card>
+          <p className="text-secondary mb-0">Selecione um questionário para carregar as perguntas.</p>
+        </Card>
+      ) : loadingQuestions ? (
         <Loading message="Carregando perguntas..." />
       ) : reorderMode ? (
         <Card>

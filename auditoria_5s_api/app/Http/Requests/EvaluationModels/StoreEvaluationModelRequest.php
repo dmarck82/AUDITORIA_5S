@@ -27,7 +27,7 @@ class StoreEvaluationModelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => ['required', 'string', 'max:80', Rule::unique('evaluation_models', 'code')],
+            'code' => ['nullable', 'string', 'max:80', Rule::unique('evaluation_models', 'code')],
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
             'active' => ['sometimes', 'boolean'],

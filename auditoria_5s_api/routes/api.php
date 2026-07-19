@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\AssessmentController;
+use App\Http\Controllers\Api\CriterionController;
 use App\Http\Controllers\Api\EvaluationDimensionController;
 use App\Http\Controllers\Api\EvaluationModelController;
 use App\Http\Controllers\Api\EvaluationModelOptionController;
@@ -95,6 +96,12 @@ Route::middleware('auth:api')->group(function () {
     Route::get('evaluation-model-options/{evaluationModelOption}', [EvaluationModelOptionController::class, 'show'])->middleware('permission:evaluation_model_options.view');
     Route::match(['put', 'patch'], 'evaluation-model-options/{evaluationModelOption}', [EvaluationModelOptionController::class, 'update'])->middleware('permission:evaluation_model_options.update');
     Route::delete('evaluation-model-options/{evaluationModelOption}', [EvaluationModelOptionController::class, 'destroy'])->middleware('permission:evaluation_model_options.delete');
+
+    Route::get('criteria', [CriterionController::class, 'index'])->middleware('permission:criteria.view');
+    Route::post('criteria', [CriterionController::class, 'store'])->middleware('permission:criteria.create');
+    Route::get('criteria/{criterion}', [CriterionController::class, 'show'])->middleware('permission:criteria.view');
+    Route::match(['put', 'patch'], 'criteria/{criterion}', [CriterionController::class, 'update'])->middleware('permission:criteria.update');
+    Route::delete('criteria/{criterion}', [CriterionController::class, 'destroy'])->middleware('permission:criteria.delete');
 
     Route::get('people', [PersonController::class, 'index'])->middleware('permission:people.view');
     Route::post('people', [PersonController::class, 'store'])->middleware('permission:people.create');

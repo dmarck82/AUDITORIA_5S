@@ -15,25 +15,21 @@ class AssessmentSeeder extends Seeder
             ->where('name', '5S Standard Assessment')
             ->firstOrFail();
 
-        $people = Person::query()
-            ->where('active', true)
-            ->whereNotNull('unit_id')
-            ->whereNotNull('sector_id')
-            ->orderBy('id')
-            ->take(5)
-            ->get();
+        $examples = [
+            ['email' => 'admin@admin.com.br', 'status' => 'DRAFT', 'title' => 'Supervisão 5S - Almoxarifado - Rascunho'],
+            ['email' => 'douglas@exemplo.com', 'status' => 'AVAILABLE', 'title' => 'Supervisão 5S - Almoxarifado - Disponível'],
+            ['email' => 'marcello@exemplo.com', 'status' => 'IN_PROGRESS', 'title' => 'Supervisão 5S - Almoxarifado - Em andamento'],
+        ];
 
-        $statuses = ['DRAFT', 'AVAILABLE', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'];
-
-        foreach ($statuses as $index => $status) {
-            $person = $people[$index] ?? $people->first();
+        foreach ($examples as $index => $example) {
+            $person = Person::query()->where('email', $example['email'])->first();
 
             if (! $person) {
-                return;
+                continue;
             }
 
             $assessment = Assessment::query()->firstOrNew([
-                'title' => "Avaliação 5S - {$person->name} - {$status}",
+                'title' => $example['title'],
                 'person_id' => $person->id,
             ]);
 
@@ -42,11 +38,11 @@ class AssessmentSeeder extends Seeder
                 'organization_id' => $person->organization_id,
                 'unit_id' => $person->unit_id,
                 'sector_id' => $person->sector_id,
-                'status' => $status,
+                'status' => $example['status'],
                 'access_code' => $assessment->access_code ?: Assessment::makeAccessCode(),
                 'expires_at' => now()->addDays(15 + $index),
-                'answered_at' => $status === 'COMPLETED' ? now()->subDay() : null,
-                'active' => $status !== 'CANCELLED',
+                'answered_at' => null,
+                'active' => true,
             ])->save();
         }
     }
