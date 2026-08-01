@@ -78,9 +78,10 @@ function Local1sList() {
       <PageHeader
         title="Organizações"
         description="Gerencie empresas cadastradas."
-        actions={can('local1s.create') && (
+        actions={(
           <PageActions>
-            <Link className="btn btn-primary" to="/local1s/create">Nova Organização</Link>
+            <Link className="btn btn-outline-secondary" to="/cadastros"><i className="bi bi-arrow-left" aria-hidden="true" /> Voltar aos Cadastros</Link>
+            {can('local1s.create') && <Link className="btn btn-primary" to="/local1s/create">Nova Organização</Link>}
           </PageActions>
         )}
       />
@@ -90,7 +91,7 @@ function Local1sList() {
       {loading ? (
         <Loading message="Carregando organizações..." />
       ) : (
-        <DataTable columns={columns} rows={local1s} emptyMessage="Nenhuma organização encontrada." />
+        <DataTable centered columns={columns} rows={local1s} emptyMessage="Nenhuma organização encontrada." />
       )}
     </section>
   )

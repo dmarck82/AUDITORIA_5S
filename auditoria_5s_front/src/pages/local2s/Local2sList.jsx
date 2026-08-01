@@ -94,9 +94,10 @@ function Local2sList() {
       <PageHeader
         title="Setor/OMDS"
         description="Gerencie filiais e plantas."
-        actions={can("local2s.create") && (
+        actions={(
           <PageActions>
-            <Link className="btn btn-primary" to="/local2s/create">Novao Setor/OMDS</Link>
+            <Link className="btn btn-outline-secondary" to="/cadastros"><i className="bi bi-arrow-left" aria-hidden="true" /> Voltar aos Cadastros</Link>
+            {can("local2s.create") && <Link className="btn btn-primary" to="/local2s/create">Novao Setor/OMDS</Link>}
           </PageActions>
         )}
       />
@@ -104,7 +105,7 @@ function Local2sList() {
       {loading ? (
         <Loading message="Carregando Setor/OMDS..." />
       ) : (
-        <DataTable columns={columns} rows={local2s} emptyMessage="Nenhumao Setor/OMDS encontrado." />
+        <DataTable centered columns={columns} rows={local2s} emptyMessage="Nenhumao Setor/OMDS encontrado." />
       )}
     </section>
   );

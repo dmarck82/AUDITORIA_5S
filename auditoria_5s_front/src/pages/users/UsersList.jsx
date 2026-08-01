@@ -118,9 +118,10 @@ function UsersList() {
       <PageHeader
         title="Usuários"
         description="Gerencie os usuários cadastradas."
-        actions={can("users.create") && (
+        actions={(
           <PageActions>
-            <Link className="btn btn-primary" to="/users/create">Novo Usuário</Link>
+            <Link className="btn btn-outline-secondary" to="/cadastros"><i className="bi bi-arrow-left" aria-hidden="true" /> Voltar aos Cadastros</Link>
+            {can("users.create") && <Link className="btn btn-primary" to="/users/create">Novo Usuário</Link>}
           </PageActions>
         )}
       />

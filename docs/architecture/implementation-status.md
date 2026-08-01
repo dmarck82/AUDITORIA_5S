@@ -5,7 +5,8 @@
 Status: ativa e preservada.
 
 O fluxo oficial continua sendo `pending → active → completed`. Após o
-encerramento da R08, não há uma próxima tarefa vigente elegível para ativação.
+encerramento da R08, a R09 foi registrada como tarefa pendente elegível, mas
+ainda não foi movida para `active`.
 
 ## R01 — Reinício da estrutura simplificada
 
@@ -209,11 +210,13 @@ ser executado novamente sem duplicar seus registros.
 
 ## Tarefa ativa
 
-Nenhuma. A R08 foi concluída e não existe uma tarefa vigente elegível para
-ativação.
+Nenhuma. A R08 foi concluída e a R09 permanece em `pending`, aguardando
+ativação manual em um segundo momento.
 
 ## Próxima fase funcional
 
-Depende de definição humana e de uma nova tarefa alinhada ao domínio vigente.
-Os documentos numerados antigos mantidos em `pending` são históricos da
-arquitetura anterior e não são elegíveis para ativação automática.
+A R09 — Foto do operador autenticado na navegação — é a próxima tarefa vigente
+elegível. Ela permanece em `pending` e não deve ser implementada antes de ser
+movida manualmente para `active`. Os documentos numerados antigos mantidos em
+`pending` são históricos da arquitetura anterior e não são elegíveis para
+ativação automática.

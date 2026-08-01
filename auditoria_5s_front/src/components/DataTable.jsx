@@ -45,6 +45,7 @@ function DataTable({
   columns,
   rows,
   emptyMessage = "Nenhum registro encontrado.",
+  centered = false,
 }) {
   const [search, setSearch] = useState("");
   const [pageSize, setPageSize] = useState(50);
@@ -128,9 +129,9 @@ function DataTable({
   return (
     <div className="data-table app-card card">
       <div className="card-body">
-      <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
-        <label className="d-flex align-items-center gap-2 mb-0">
-          <span>Mostrar</span>
+      <div className="data-table-toolbar">
+        <label className="data-table-size-control mb-0">
+          <span className="text-secondary">Exibir</span>
           <select
             className="form-select form-select-sm data-table-page-size"
             value={pageSize}
@@ -141,13 +142,15 @@ function DataTable({
             <option value="100">100</option>
             <option value="200">200</option>
           </select>
-          <span>registros</span>
+          <span className="text-secondary">por página</span>
         </label>
 
-        <label className="d-flex align-items-center gap-2 mb-0">
-          <span>Buscar</span>
+        <label className="data-table-search-control mb-0">
+          <span className="visually-hidden">Buscar</span>
+          <i className="bi bi-search" aria-hidden="true" />
           <input
             className="form-control form-control-sm data-table-search"
+            placeholder="Buscar registros..."
             value={search}
             onChange={updateSearch}
           />
@@ -155,7 +158,7 @@ function DataTable({
       </div>
 
       <div className="table-responsive data-table-frame">
-        <table className="table table-striped table-hover align-middle">
+        <table className={centered ? "table table-striped table-hover align-middle data-table-cells-centered" : "table table-striped table-hover align-middle"}>
           <thead>
             <tr>
               {columns.map((column) => (
@@ -205,11 +208,11 @@ function DataTable({
         </table>
       </div>
 
-      <div className="d-flex flex-wrap align-items-center justify-content-between gap-3">
-        <div className="text-secondary">
+      <div className="data-table-footer">
+        <div className="data-table-count">
           Mostrando {firstItem} até {lastItem} de {sortedRows.length} registros
         </div>
-        <div className="btn-group btn-group-sm">
+        <div className="data-table-pagination btn-group btn-group-sm">
           <button
             className="btn btn-outline-secondary"
             type="button"

@@ -117,9 +117,10 @@ function OperatorsList() {
       <PageHeader
         title="Operadores"
         description="Gerencie os acessos ao sistema."
-        actions={can('operators.create') && (
+        actions={(
           <PageActions>
-            <Link className="btn btn-primary" to="/operators/create">Novo Operador</Link>
+            <Link className="btn btn-outline-secondary" to="/cadastros"><i className="bi bi-arrow-left" aria-hidden="true" /> Voltar aos Cadastros</Link>
+            {can('operators.create') && <Link className="btn btn-primary" to="/operators/create">Novo Operador</Link>}
           </PageActions>
         )}
       />

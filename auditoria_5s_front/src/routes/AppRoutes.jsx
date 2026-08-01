@@ -16,6 +16,7 @@ import Local3sView from '../pages/local3s/Local3sView'
 import OperatorsForm from '../pages/operators/OperatorsForm'
 import OperatorsList from '../pages/operators/OperatorsList'
 import OperatorsView from '../pages/operators/OperatorsView'
+import Registrations from '../pages/registrations/Registrations'
 import SupervisionsForm from '../pages/supervisions/SupervisionsForm'
 import SupervisionsList from '../pages/supervisions/SupervisionsList'
 import SupervisionsView from '../pages/supervisions/SupervisionsView'
@@ -37,6 +38,7 @@ function AppRoutes() {
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
           <Route index element={<HomeRedirect />} />
+          <Route path="cadastros" element={<Registrations />} />
 
           <Route element={<PermissionRoute permission="local1s.view" />}>
             <Route path="local1s" element={<Local1sList />} />

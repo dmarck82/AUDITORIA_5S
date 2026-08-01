@@ -8,6 +8,7 @@ function Navbar() {
   const { can, isAuthenticated, logout, operator } = useAuth()
   const operatorName = operator?.name || 'Operator'
   const accessLevelName = getAccessLevelLabel(operator?.access_level)
+  const operatorInitial = operatorName.trim().charAt(0).toLocaleUpperCase('pt-BR') || 'O'
 
   const handleLogout = () => {
     logout()
@@ -15,10 +16,20 @@ function Navbar() {
   }
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav className="app-navbar navbar navbar-expand-lg navbar-dark sticky-top">
       <div className="container">
         <NavLink className="navbar-brand" to="/">
-          Avaliação 5S
+          <span className="brand-mark" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+          </span>
+          <span className="brand-copy">
+            <strong>SSEP</strong>
+            <small>Supervisão 5S</small>
+          </span>
         </NavLink>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Alternar navegação">
           <span className="navbar-toggler-icon" />
@@ -27,10 +38,16 @@ function Navbar() {
           {isAuthenticated && (
             <>
               <NavbarMenu can={can} onLogout={handleLogout} />
-              <div className="d-flex align-items-center gap-3">
-                <span className="navbar-text">{operatorName}</span>
-                <span className="navbar-text">{accessLevelName}</span>
-                <button className="btn btn-outline-light btn-sm" type="button" onClick={handleLogout}>Sair</button>
+              <div className="operator-area">
+                <span className="operator-avatar" aria-hidden="true">{operatorInitial}</span>
+                <span className="operator-details">
+                  <strong>{operatorName}</strong>
+                  <small>{accessLevelName}</small>
+                </span>
+                <button className="navbar-logout btn btn-outline-light btn-sm" type="button" onClick={handleLogout}>
+                  <i className="bi bi-box-arrow-right" aria-hidden="true" />
+                  <span>Sair</span>
+                </button>
               </div>
             </>
           )}

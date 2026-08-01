@@ -1,19 +1,9 @@
 import { NavLink } from 'react-router-dom'
+import { registrationItems } from '../../constants/registrations'
 
 const menuItems = [
   { label: 'Início', path: '/' },
-  {
-    label: 'Cadastros',
-    items: [
-      { label: 'Organização', path: '/local1s', permission: 'local1s.view' },
-      { label: 'Setor/OMDS', path: '/local2s', permission: 'local2s.view' },
-      { label: 'Subsetor/Seção', path: '/local3s', permission: 'local3s.view' },
-      { label: 'Ambiente de Trabalho', path: '/work-environments', permission: 'work_environments.view' },
-      { label: 'Critérios de Verificação', path: '/verification-criteria', permission: 'verification_criteria.view' },
-      { label: 'Usuários', path: '/users', permission: 'users.view' },
-      { label: 'Operadores', path: '/operators', permission: 'operators.view' },
-    ],
-  },
+  { label: 'Cadastros', path: '/cadastros', permissions: registrationItems.map((item) => item.permission) },
   { label: 'Supervisões', path: '/supervisions', permission: 'supervisions.view' },
   {
     label: 'Sistema',
@@ -62,9 +52,12 @@ function DropdownMenu({ group, can, onLogout }) {
 }
 
 function NavbarMenu({ can, onLogout }) {
+  const canViewItem = (item) => (!item.permission || can(item.permission))
+    && (!item.permissions || item.permissions.some((permission) => can(permission)))
+
   return (
     <ul className="navbar-nav me-auto">
-      {menuItems.filter((item) => !item.permission || can(item.permission)).map((item) => item.items ? (
+      {menuItems.filter(canViewItem).map((item) => item.items ? (
         <DropdownMenu key={item.label} group={item} can={can} onLogout={onLogout} />
       ) : (
         <li className="nav-item" key={item.label}>

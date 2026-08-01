@@ -63,14 +63,15 @@ function Local3sList() {
       <PageHeader
         title="Subsetor/Seção"
         description="Gerencie áreas avaliáveis."
-        actions={can('local3s.create') && (
+        actions={(
           <PageActions>
-            <Link className="btn btn-primary" to="/local3s/create">Novo Subsetor/Seção</Link>
+            <Link className="btn btn-outline-secondary" to="/cadastros"><i className="bi bi-arrow-left" aria-hidden="true" /> Voltar aos Cadastros</Link>
+            {can('local3s.create') && <Link className="btn btn-primary" to="/local3s/create">Novo Subsetor/Seção</Link>}
           </PageActions>
         )}
       />
       <AlertMessage type={alert?.type} message={alert?.message} />
-      {loading ? <Loading message="Carregando subsetores/seções..." /> : <DataTable columns={columns} rows={local3s} emptyMessage="Nenhum subsetor/seção encontrado." />}
+      {loading ? <Loading message="Carregando subsetores/seções..." /> : <DataTable centered columns={columns} rows={local3s} emptyMessage="Nenhum subsetor/seção encontrado." />}
     </section>
   )
 }

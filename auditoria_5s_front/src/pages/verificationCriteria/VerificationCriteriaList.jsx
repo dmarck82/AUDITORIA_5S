@@ -79,9 +79,10 @@ function VerificationCriteriaList() {
       <PageHeader
         title="Critérios de Verificação"
         description="Gerencie as perguntas padrão da metodologia 5S."
-        actions={can('verification_criteria.create') && (
+        actions={(
           <PageActions>
-            <Link className="btn btn-primary" to="/verification-criteria/create">Novo Critério de Verificação</Link>
+            <Link className="btn btn-outline-secondary" to="/cadastros"><i className="bi bi-arrow-left" aria-hidden="true" /> Voltar aos Cadastros</Link>
+            {can('verification_criteria.create') && <Link className="btn btn-primary" to="/verification-criteria/create">Novo Critério de Verificação</Link>}
           </PageActions>
         )}
       />

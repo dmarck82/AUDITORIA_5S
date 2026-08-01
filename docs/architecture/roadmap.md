@@ -12,11 +12,12 @@
 | R06 | Seed demonstrativo do Almoxarifado | Concluída |
 | R07 | Códigos automáticos dos Critérios de Verificação | Concluída |
 | R08 | Fluxo e acesso hierárquico das Supervisões | Concluída |
+| R09 | Foto do operador autenticado na navegação | Pendente |
 
 ## Sequência obrigatória
 
-As tarefas seguem a ordem R01 → R02 → R03 → R04 → R05 → R06 → R07 → R08. A
-conclusão de cada etapa deve usar
+As tarefas seguem a ordem R01 → R02 → R03 → R04 → R05 → R06 → R07 → R08 →
+R09. A conclusão de cada etapa deve usar
 `docs/tasks/templates/00-encerrar-tarefa.md`.
 
 ## Histórico anterior
@@ -40,5 +41,5 @@ mas não representam o domínio vigente.
   códigos de Critérios de Verificação por senso;
 - R08 foi concluída com fluxo explícito, acesso hierárquico por perfil e
   transferência auditável de responsabilidade;
-- não há próxima tarefa vigente ativa; uma nova fase deverá ser definida antes
-  da continuidade.
+- R09 foi registrada para expor e apresentar com segurança a foto do Usuário
+  vinculado ao Operador autenticado; permanece pendente e ainda não está ativa.

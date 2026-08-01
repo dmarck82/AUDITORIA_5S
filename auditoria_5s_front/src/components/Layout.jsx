@@ -4,14 +4,14 @@ import { PageContainer } from './ui'
 
 function Layout() {
   return (
-    <>
+    <div className="app-shell">
       <Navbar />
-      <main className="container py-4">
+      <main className="app-main container">
         <PageContainer>
           <Outlet />
         </PageContainer>
       </main>
-    </>
+    </div>
   )
 }
 

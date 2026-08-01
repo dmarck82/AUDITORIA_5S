@@ -91,14 +91,15 @@ function WorkEnvironmentsList() {
       <PageHeader
         title="Ambiente de Trabalho"
         description="Gerencie os locais supervisionáveis pela metodologia 5S."
-        actions={can('work_environments.create') && (
+        actions={(
           <PageActions>
-            <Link className="btn btn-primary" to="/work-environments/create">Novo Ambiente de Trabalho</Link>
+            <Link className="btn btn-outline-secondary" to="/cadastros"><i className="bi bi-arrow-left" aria-hidden="true" /> Voltar aos Cadastros</Link>
+            {can('work_environments.create') && <Link className="btn btn-primary" to="/work-environments/create">Novo Ambiente de Trabalho</Link>}
           </PageActions>
         )}
       />
       <AlertMessage type={alert?.type} message={alert?.message} />
-      {loading ? <Loading message="Carregando ambientes de trabalho..." /> : <DataTable columns={columns} rows={workEnvironments} emptyMessage="Nenhum ambiente de trabalho encontrado." />}
+      {loading ? <Loading message="Carregando ambientes de trabalho..." /> : <DataTable centered columns={columns} rows={workEnvironments} emptyMessage="Nenhum ambiente de trabalho encontrado." />}
     </section>
   )
 }

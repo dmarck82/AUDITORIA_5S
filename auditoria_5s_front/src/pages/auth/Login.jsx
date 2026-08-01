@@ -58,11 +58,42 @@ function Login() {
 
   return (
     <main className="auth-page">
-      <div className="card auth-card">
-        <div className="card-body">
-          <div className="mb-4 text-center">
-            <h1 className="h3 mb-1">Avaliação 5S</h1>
-            <p className="text-secondary">Entre para continuar</p>
+      <div className="auth-card">
+        <section className="auth-intro" aria-label="SSEP">
+          <div>
+            <div className="auth-brand">
+              <span className="brand-mark brand-mark-large" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+              </span>
+              <span className="brand-copy">
+                <strong>SSEP</strong>
+                <small>Sistema de Supervisão</small>
+              </span>
+            </div>
+            <div className="auth-intro-copy">
+              <span className="auth-eyebrow">Gestão de ambientes</span>
+              <h1>Supervisão 5S simples, objetiva e confiável.</h1>
+              <p>Acompanhe critérios, ambientes de trabalho e supervisões em um só lugar.</p>
+            </div>
+          </div>
+          <div className="auth-senses" aria-label="Os cinco sensos">
+            <span>Utilização</span>
+            <span>Ordenação</span>
+            <span>Limpeza</span>
+            <span>Padronização</span>
+            <span>Disciplina</span>
+          </div>
+        </section>
+
+        <section className="auth-form-panel">
+          <div className="auth-form-header">
+            <span className="auth-form-icon" aria-hidden="true"><i className="bi bi-shield-check" /></span>
+            <h2>Bem-vindo</h2>
+            <p>Informe suas credenciais para acessar o sistema.</p>
           </div>
 
           <AlertMessage type={alert?.type} message={alert?.message} errors={alert?.errors} />
@@ -76,6 +107,7 @@ function Login() {
                 className="form-control"
                 id="login"
                 name="login"
+                placeholder="Digite seu login"
                 value={form.login}
                 onChange={updateField}
                 autoComplete="username"
@@ -91,6 +123,7 @@ function Login() {
                 className="form-control"
                 id="password"
                 name="password"
+                placeholder="Digite sua senha"
                 type="password"
                 value={form.password}
                 onChange={updateField}
@@ -99,11 +132,13 @@ function Login() {
               />
             </div>
 
-            <button className="btn btn-primary" type="submit" disabled={submitting}>
-              {submitting ? 'Entrando...' : 'Entrar'}
+            <button className="btn btn-primary auth-submit" type="submit" disabled={submitting}>
+              <span>{submitting ? 'Entrando...' : 'Entrar no sistema'}</span>
+              {!submitting && <i className="bi bi-arrow-right" aria-hidden="true" />}
             </button>
           </form>
-        </div>
+          <p className="auth-support"><i className="bi bi-lock" aria-hidden="true" /> Acesso restrito a usuários autorizados</p>
+        </section>
       </div>
     </main>
   )
